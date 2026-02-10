@@ -4,24 +4,23 @@ import { formatETH } from "../lib/format";
 import TransactionStatus from "../components/TransactionStatus";
 import { Link } from "react-router-dom";
 
+type Car = {
+  id: bigint;
+  owner: string;
+  brand: string;
+  model: string;
+  year: number;
+  dailyPrice: bigint;
+  isActive: boolean;
+  metadataURI: string;
+};
+
 export default function MyListingsPage() {
   const { address, isConnected } = useAccount();
   const { data: carCount } = useCarCount();
   const { data: carsResult, isLoading } = useAllCars(carCount);
   const { data: earnings } = useOwnerEarnings(address);
   const withdraw = useWithdrawEarnings();
-  const update = useUpdateCar();
-
-  type Car = {
-    id: bigint;
-    owner: string;
-    brand: string;
-    model: string;
-    year: number;
-    dailyPrice: bigint;
-    isActive: boolean;
-    metadataURI: string;
-  };
 
   const myCars: Car[] = (carsResult ?? [])
     .map((r) => (r.status === "success" ? (r.result as Car) : null))
@@ -63,7 +62,7 @@ export default function MyListingsPage() {
             disabled={!earnings || earnings === 0n || withdraw.isPending || withdraw.isConfirming}
             className="bg-green-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
           >
-            Retirer
+            {withdraw.isPending ? "Signature..." : withdraw.isConfirming ? "Confirmation..." : "Retirer"}
           </button>
         </div>
         <TransactionStatus
@@ -86,30 +85,37 @@ export default function MyListingsPage() {
 
       <div className="space-y-4">
         {myCars.map((car) => (
-          <div key={car.id.toString()} className="bg-white rounded-xl shadow-sm border p-5">
-            <div className="flex items-start justify-between">
-              <div>
-                <Link to={`/car/${car.id}`} className="font-semibold text-gray-900 hover:text-blue-600">
-                  {car.brand} {car.model} ({car.year})
-                </Link>
-                <p className="text-sm text-gray-500">#{car.id.toString()} &middot; {formatETH(car.dailyPrice)} ETH/jour</p>
-              </div>
-              <button
-                onClick={() => update.updateCar(car.id, car.dailyPrice, !car.isActive)}
-                disabled={update.isPending || update.isConfirming}
-                className={`text-xs font-medium px-3 py-1 rounded-full border transition-colors ${
-                  car.isActive
-                    ? "border-red-200 text-red-600 hover:bg-red-50"
-                    : "border-green-200 text-green-600 hover:bg-green-50"
-                }`}
-              >
-                {car.isActive ? "Desactiver" : "Activer"}
-              </button>
-            </div>
-          </div>
+          <CarListingCard key={car.id.toString()} car={car} />
         ))}
       </div>
+    </div>
+  );
+}
 
+function CarListingCard({ car }: { car: Car }) {
+  const update = useUpdateCar();
+
+  return (
+    <div className="bg-white rounded-xl shadow-sm border p-5 space-y-3">
+      <div className="flex items-start justify-between">
+        <div>
+          <Link to={`/car/${car.id}`} className="font-semibold text-gray-900 hover:text-blue-600">
+            {car.brand} {car.model} ({car.year})
+          </Link>
+          <p className="text-sm text-gray-500">#{car.id.toString()} &middot; {formatETH(car.dailyPrice)} ETH/jour</p>
+        </div>
+        <button
+          onClick={() => update.updateCar(car.id, car.dailyPrice, !car.isActive)}
+          disabled={update.isPending || update.isConfirming}
+          className={`text-xs font-medium px-3 py-1 rounded-full border transition-colors ${
+            car.isActive
+              ? "border-red-200 text-red-600 hover:bg-red-50"
+              : "border-green-200 text-green-600 hover:bg-green-50"
+          }`}
+        >
+          {update.isPending ? "Signature..." : update.isConfirming ? "Confirmation..." : car.isActive ? "Desactiver" : "Activer"}
+        </button>
+      </div>
       <TransactionStatus
         isPending={update.isPending}
         isConfirming={update.isConfirming}

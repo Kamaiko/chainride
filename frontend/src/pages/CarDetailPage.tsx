@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
 import { useAccount } from "wagmi";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useCar, useCarDepositAmount, useCalculateRentalPrice, useRentCar, useRentCarWithDeposit } from "../hooks/useCarRental";
 import { formatETH, shortenAddress } from "../lib/format";
 import { toMidnightUTC, daysBetween } from "../lib/dates";
@@ -29,6 +29,13 @@ export default function CarDetailPage() {
   const rentV2 = useRentCarWithDeposit();
   const useDeposit = deposit > 0n;
   const rent = useDeposit ? rentV2 : rentV1;
+
+  useEffect(() => {
+    if (rent.isSuccess) {
+      setStartStr("");
+      setEndStr("");
+    }
+  }, [rent.isSuccess]);
 
   const handleRent = () => {
     if (!validDates || !rentalPrice) return;

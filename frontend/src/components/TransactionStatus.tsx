@@ -1,3 +1,5 @@
+import { useChainId } from "wagmi";
+import { sepolia } from "wagmi/chains";
 import { getErrorMessage } from "../lib/errors";
 
 interface TransactionStatusProps {
@@ -61,6 +63,12 @@ function Spinner() {
 }
 
 function TxLink({ hash }: { hash: string }) {
+  const chainId = useChainId();
+
+  if (chainId !== sepolia.id) {
+    return <span className="font-mono text-xs ml-auto">{hash.slice(0, 10)}...</span>;
+  }
+
   return (
     <a
       href={`https://sepolia.etherscan.io/tx/${hash}`}

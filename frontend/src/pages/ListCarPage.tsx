@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { parseEther } from "viem";
 import { useAccount } from "wagmi";
 import { useListCar } from "../hooks/useCarRental";
@@ -13,6 +13,16 @@ export default function ListCarPage() {
   const [metadataURI, setMetadataURI] = useState("");
 
   const { listCar, isPending, isConfirming, isSuccess, hash, error } = useListCar();
+
+  useEffect(() => {
+    if (isSuccess) {
+      setBrand("");
+      setModel("");
+      setYear("2024");
+      setDailyPrice("0.01");
+      setMetadataURI("");
+    }
+  }, [isSuccess]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
