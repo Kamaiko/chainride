@@ -39,7 +39,10 @@ export function getErrorMessage(error: unknown): string {
   }
 
   // User rejected
-  if (err.name === "UserRejectedRequestError" || (err.message as string)?.includes("User rejected")) {
+  if (
+    err.name === "UserRejectedRequestError" ||
+    (err.message as string)?.includes("User rejected")
+  ) {
     return "Transaction annulee par l'utilisateur.";
   }
 

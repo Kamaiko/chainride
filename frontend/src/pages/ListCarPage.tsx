@@ -22,7 +22,11 @@ export default function ListCarPage() {
   const { listCar, isPending, isConfirming, isSuccess, hash, error } = useListCar();
 
   const resetForm = useCallback(() => {
-    setBrand(""); setModel(""); setYear("2024"); setDailyPrice("0.01"); setMetadataURI("");
+    setBrand("");
+    setModel("");
+    setYear("2024");
+    setDailyPrice("0.01");
+    setMetadataURI("");
   }, []);
   useFormResetOnSuccess(isSuccess, hash, resetForm);
 
@@ -89,7 +93,9 @@ export default function ListCarPage() {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-slate-300 mb-1">Prix / jour (ETH)</label>
+                <label className="block text-sm font-medium text-slate-300 mb-1">
+                  Prix / jour (ETH)
+                </label>
                 <input
                   type="number"
                   value={dailyPrice}

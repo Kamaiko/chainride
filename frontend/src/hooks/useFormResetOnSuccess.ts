@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useRef, useEffect } from "react";
 
 /**
  * Reset a form exactly once per confirmed transaction.
@@ -8,14 +8,14 @@ import { useState, useEffect } from "react";
 export function useFormResetOnSuccess(
   isSuccess: boolean,
   hash: `0x${string}` | undefined,
-  onReset: () => void
+  onReset: () => void,
 ) {
-  const [lastResetHash, setLastResetHash] = useState<string>();
+  const lastResetHash = useRef<string | undefined>(undefined);
 
   useEffect(() => {
-    if (isSuccess && hash && hash !== lastResetHash) {
-      setLastResetHash(hash);
+    if (isSuccess && hash && hash !== lastResetHash.current) {
+      lastResetHash.current = hash;
       onReset();
     }
-  }, [isSuccess, hash, lastResetHash, onReset]);
+  }, [isSuccess, hash, onReset]);
 }

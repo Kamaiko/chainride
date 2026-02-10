@@ -2,7 +2,13 @@ import { useParams } from "react-router-dom";
 import { useAccount } from "wagmi";
 import { useState, useCallback } from "react";
 import { Coins, Shield, User, Hash, AlertTriangle } from "lucide-react";
-import { useCar, useCarDepositAmount, useCalculateRentalPrice, useRentCar, useRentCarWithDeposit } from "../hooks/useCarRental";
+import {
+  useCar,
+  useCarDepositAmount,
+  useCalculateRentalPrice,
+  useRentCar,
+  useRentCarWithDeposit,
+} from "../hooks/useCarRental";
 import { useFormResetOnSuccess } from "../hooks/useFormResetOnSuccess";
 import { formatETH, shortenAddress } from "../lib/format";
 import { toMidnightUTC, daysBetween } from "../lib/dates";
@@ -39,7 +45,8 @@ export default function CarDetailPage() {
   const rent = useDeposit ? rentV2 : rentV1;
 
   const resetDates = useCallback(() => {
-    setStartStr(""); setEndStr("");
+    setStartStr("");
+    setEndStr("");
   }, []);
   useFormResetOnSuccess(rent.isSuccess, rent.hash, resetDates);
 
@@ -155,9 +162,17 @@ export default function CarDetailPage() {
 
             {validDates && rentalPrice !== undefined && (
               <div className="glass-subtle p-4 space-y-1 text-sm mt-4">
-                <p className="text-slate-300">Duree : <strong>{daysBetween(startDate, endDate)} jour(s)</strong></p>
-                <p className="text-slate-300">Location : <strong>{formatETH(rentalPrice)} ETH</strong></p>
-                {deposit > 0n && <p className="text-slate-300">Depot : <strong>{formatETH(deposit)} ETH</strong></p>}
+                <p className="text-slate-300">
+                  Duree : <strong>{daysBetween(startDate, endDate)} jour(s)</strong>
+                </p>
+                <p className="text-slate-300">
+                  Location : <strong>{formatETH(rentalPrice)} ETH</strong>
+                </p>
+                {deposit > 0n && (
+                  <p className="text-slate-300">
+                    Depot : <strong>{formatETH(deposit)} ETH</strong>
+                  </p>
+                )}
                 <p className="text-lg font-bold gradient-text pt-1">
                   Total : {formatETH(totalCost)} ETH
                 </p>

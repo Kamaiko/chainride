@@ -1,7 +1,13 @@
 import { useAccount } from "wagmi";
 import { motion } from "framer-motion";
 import { Key, CalendarX, CalendarDays, Coins, RotateCcw, X, Wallet } from "lucide-react";
-import { useReservationCount, useAllReservations, useReturnCar, useCancelReservation, useCar } from "../hooks/useCarRental";
+import {
+  useReservationCount,
+  useAllReservations,
+  useReturnCar,
+  useCancelReservation,
+  useCar,
+} from "../hooks/useCarRental";
 import { extractResults } from "../lib/contractResults";
 import type { Reservation } from "../types/contracts";
 import { formatETH } from "../lib/format";
@@ -14,24 +20,16 @@ import Badge from "../components/ui/Badge";
 import EmptyState from "../components/ui/EmptyState";
 import LoadingSkeleton from "../components/ui/LoadingSkeleton";
 import TransactionButton from "../components/ui/TransactionButton";
-
-const stagger = {
-  hidden: {},
-  show: { transition: { staggerChildren: 0.08 } },
-};
-
-const fadeUp = {
-  hidden: { opacity: 0, y: 12 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.3 } },
-};
+import { stagger, fadeUp } from "../lib/animations";
 
 export default function MyRentalsPage() {
   const { address, isConnected } = useAccount();
   const { data: resCount } = useReservationCount();
   const { data: resResults, isLoading } = useAllReservations(resCount);
 
-  const myReservations = extractResults<Reservation>(resResults)
-    .filter((r) => r.renter.toLowerCase() === address?.toLowerCase());
+  const myReservations = extractResults<Reservation>(resResults).filter(
+    (r) => r.renter.toLowerCase() === address?.toLowerCase(),
+  );
 
   if (!isConnected) {
     return (
@@ -61,12 +59,7 @@ export default function MyRentalsPage() {
         />
       )}
 
-      <motion.div
-        variants={stagger}
-        initial="hidden"
-        animate="show"
-        className="space-y-4"
-      >
+      <motion.div variants={stagger} initial="hidden" animate="show" className="space-y-4">
         {myReservations.map((res) => (
           <motion.div key={res.id.toString()} variants={fadeUp}>
             <ReservationCard reservation={res} />
@@ -104,14 +97,18 @@ function ReservationCard({ reservation }: { reservation: Reservation }) {
           <CalendarDays className="h-4 w-4 text-slate-500 mt-0.5" />
           <div>
             <p className="text-slate-500">Debut</p>
-            <p className="font-medium text-slate-300">{formatDate(fromTimestamp(reservation.startDate))}</p>
+            <p className="font-medium text-slate-300">
+              {formatDate(fromTimestamp(reservation.startDate))}
+            </p>
           </div>
         </div>
         <div className="flex items-start gap-1.5">
           <CalendarDays className="h-4 w-4 text-slate-500 mt-0.5" />
           <div>
             <p className="text-slate-500">Fin</p>
-            <p className="font-medium text-slate-300">{formatDate(fromTimestamp(reservation.endDate))}</p>
+            <p className="font-medium text-slate-300">
+              {formatDate(fromTimestamp(reservation.endDate))}
+            </p>
           </div>
         </div>
         <div className="flex items-start gap-1.5">

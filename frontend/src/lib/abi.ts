@@ -1,1253 +1,1253 @@
 export const CarRentalABI = [
   {
-    "inputs": [
+    inputs: [
       {
-        "internalType": "address",
-        "name": "target",
-        "type": "address"
-      }
+        internalType: "address",
+        name: "target",
+        type: "address",
+      },
     ],
-    "name": "AddressEmptyCode",
-    "type": "error"
+    name: "AddressEmptyCode",
+    type: "error",
   },
   {
-    "inputs": [],
-    "name": "CannotRentOwnCar",
-    "type": "error"
+    inputs: [],
+    name: "CannotRentOwnCar",
+    type: "error",
   },
   {
-    "inputs": [
+    inputs: [
       {
-        "internalType": "uint256",
-        "name": "carId",
-        "type": "uint256"
-      }
+        internalType: "uint256",
+        name: "carId",
+        type: "uint256",
+      },
     ],
-    "name": "CarNotActive",
-    "type": "error"
+    name: "CarNotActive",
+    type: "error",
   },
   {
-    "inputs": [
+    inputs: [
       {
-        "internalType": "uint256",
-        "name": "carId",
-        "type": "uint256"
-      }
+        internalType: "uint256",
+        name: "carId",
+        type: "uint256",
+      },
     ],
-    "name": "CarNotFound",
-    "type": "error"
+    name: "CarNotFound",
+    type: "error",
   },
   {
-    "inputs": [],
-    "name": "DatesNotDayAligned",
-    "type": "error"
+    inputs: [],
+    name: "DatesNotDayAligned",
+    type: "error",
   },
   {
-    "inputs": [
+    inputs: [
       {
-        "internalType": "uint256",
-        "name": "reservationId",
-        "type": "uint256"
-      }
+        internalType: "uint256",
+        name: "reservationId",
+        type: "uint256",
+      },
     ],
-    "name": "DepositAlreadyRefunded",
-    "type": "error"
+    name: "DepositAlreadyRefunded",
+    type: "error",
   },
   {
-    "inputs": [
+    inputs: [
       {
-        "internalType": "uint256",
-        "name": "carId",
-        "type": "uint256"
+        internalType: "uint256",
+        name: "carId",
+        type: "uint256",
       },
       {
-        "internalType": "uint256",
-        "name": "required",
-        "type": "uint256"
-      }
+        internalType: "uint256",
+        name: "required",
+        type: "uint256",
+      },
     ],
-    "name": "DepositRequired",
-    "type": "error"
+    name: "DepositRequired",
+    type: "error",
   },
   {
-    "inputs": [
+    inputs: [
       {
-        "internalType": "address",
-        "name": "implementation",
-        "type": "address"
-      }
+        internalType: "address",
+        name: "implementation",
+        type: "address",
+      },
     ],
-    "name": "ERC1967InvalidImplementation",
-    "type": "error"
+    name: "ERC1967InvalidImplementation",
+    type: "error",
   },
   {
-    "inputs": [],
-    "name": "ERC1967NonPayable",
-    "type": "error"
+    inputs: [],
+    name: "ERC1967NonPayable",
+    type: "error",
   },
   {
-    "inputs": [],
-    "name": "FailedCall",
-    "type": "error"
+    inputs: [],
+    name: "FailedCall",
+    type: "error",
   },
   {
-    "inputs": [
+    inputs: [
       {
-        "internalType": "uint256",
-        "name": "required",
-        "type": "uint256"
+        internalType: "uint256",
+        name: "required",
+        type: "uint256",
       },
       {
-        "internalType": "uint256",
-        "name": "sent",
-        "type": "uint256"
-      }
+        internalType: "uint256",
+        name: "sent",
+        type: "uint256",
+      },
     ],
-    "name": "InsufficientPayment",
-    "type": "error"
+    name: "InsufficientPayment",
+    type: "error",
   },
   {
-    "inputs": [
+    inputs: [
       {
-        "internalType": "uint64",
-        "name": "startDate",
-        "type": "uint64"
+        internalType: "uint64",
+        name: "startDate",
+        type: "uint64",
       },
       {
-        "internalType": "uint64",
-        "name": "endDate",
-        "type": "uint64"
-      }
+        internalType: "uint64",
+        name: "endDate",
+        type: "uint64",
+      },
     ],
-    "name": "InvalidDates",
-    "type": "error"
+    name: "InvalidDates",
+    type: "error",
   },
   {
-    "inputs": [],
-    "name": "InvalidFeePercent",
-    "type": "error"
+    inputs: [],
+    name: "InvalidFeePercent",
+    type: "error",
   },
   {
-    "inputs": [],
-    "name": "InvalidInitialization",
-    "type": "error"
+    inputs: [],
+    name: "InvalidInitialization",
+    type: "error",
   },
   {
-    "inputs": [],
-    "name": "NoEarningsToWithdraw",
-    "type": "error"
+    inputs: [],
+    name: "NoEarningsToWithdraw",
+    type: "error",
   },
   {
-    "inputs": [
+    inputs: [
       {
-        "internalType": "uint256",
-        "name": "carId",
-        "type": "uint256"
+        internalType: "uint256",
+        name: "carId",
+        type: "uint256",
       },
       {
-        "internalType": "address",
-        "name": "caller",
-        "type": "address"
-      }
+        internalType: "address",
+        name: "caller",
+        type: "address",
+      },
     ],
-    "name": "NotCarOwner",
-    "type": "error"
+    name: "NotCarOwner",
+    type: "error",
   },
   {
-    "inputs": [],
-    "name": "NotInitializing",
-    "type": "error"
+    inputs: [],
+    name: "NotInitializing",
+    type: "error",
   },
   {
-    "inputs": [
+    inputs: [
       {
-        "internalType": "uint256",
-        "name": "reservationId",
-        "type": "uint256"
+        internalType: "uint256",
+        name: "reservationId",
+        type: "uint256",
       },
       {
-        "internalType": "address",
-        "name": "caller",
-        "type": "address"
-      }
+        internalType: "address",
+        name: "caller",
+        type: "address",
+      },
     ],
-    "name": "NotRenter",
-    "type": "error"
+    name: "NotRenter",
+    type: "error",
   },
   {
-    "inputs": [
+    inputs: [
       {
-        "internalType": "address",
-        "name": "owner",
-        "type": "address"
-      }
+        internalType: "address",
+        name: "owner",
+        type: "address",
+      },
     ],
-    "name": "OwnableInvalidOwner",
-    "type": "error"
+    name: "OwnableInvalidOwner",
+    type: "error",
   },
   {
-    "inputs": [
+    inputs: [
       {
-        "internalType": "address",
-        "name": "account",
-        "type": "address"
-      }
+        internalType: "address",
+        name: "account",
+        type: "address",
+      },
     ],
-    "name": "OwnableUnauthorizedAccount",
-    "type": "error"
+    name: "OwnableUnauthorizedAccount",
+    type: "error",
   },
   {
-    "inputs": [],
-    "name": "ReentrancyGuardReentrantCall",
-    "type": "error"
+    inputs: [],
+    name: "ReentrancyGuardReentrantCall",
+    type: "error",
   },
   {
-    "inputs": [
+    inputs: [
       {
-        "internalType": "uint256",
-        "name": "reservationId",
-        "type": "uint256"
-      }
+        internalType: "uint256",
+        name: "reservationId",
+        type: "uint256",
+      },
     ],
-    "name": "ReservationAlreadyStarted",
-    "type": "error"
+    name: "ReservationAlreadyStarted",
+    type: "error",
   },
   {
-    "inputs": [
+    inputs: [
       {
-        "internalType": "uint256",
-        "name": "reservationId",
-        "type": "uint256"
-      }
+        internalType: "uint256",
+        name: "reservationId",
+        type: "uint256",
+      },
     ],
-    "name": "ReservationNotActive",
-    "type": "error"
+    name: "ReservationNotActive",
+    type: "error",
   },
   {
-    "inputs": [
+    inputs: [
       {
-        "internalType": "uint256",
-        "name": "reservationId",
-        "type": "uint256"
-      }
+        internalType: "uint256",
+        name: "reservationId",
+        type: "uint256",
+      },
     ],
-    "name": "ReservationNotFound",
-    "type": "error"
+    name: "ReservationNotFound",
+    type: "error",
   },
   {
-    "inputs": [
+    inputs: [
       {
-        "internalType": "uint256",
-        "name": "carId",
-        "type": "uint256"
+        internalType: "uint256",
+        name: "carId",
+        type: "uint256",
       },
       {
-        "internalType": "uint256",
-        "name": "existingReservationId",
-        "type": "uint256"
-      }
+        internalType: "uint256",
+        name: "existingReservationId",
+        type: "uint256",
+      },
     ],
-    "name": "ReservationOverlap",
-    "type": "error"
+    name: "ReservationOverlap",
+    type: "error",
   },
   {
-    "inputs": [],
-    "name": "StartDateInPast",
-    "type": "error"
+    inputs: [],
+    name: "StartDateInPast",
+    type: "error",
   },
   {
-    "inputs": [],
-    "name": "TransferFailed",
-    "type": "error"
+    inputs: [],
+    name: "TransferFailed",
+    type: "error",
   },
   {
-    "inputs": [],
-    "name": "UUPSUnauthorizedCallContext",
-    "type": "error"
+    inputs: [],
+    name: "UUPSUnauthorizedCallContext",
+    type: "error",
   },
   {
-    "inputs": [
+    inputs: [
       {
-        "internalType": "bytes32",
-        "name": "slot",
-        "type": "bytes32"
-      }
+        internalType: "bytes32",
+        name: "slot",
+        type: "bytes32",
+      },
     ],
-    "name": "UUPSUnsupportedProxiableUUID",
-    "type": "error"
+    name: "UUPSUnsupportedProxiableUUID",
+    type: "error",
   },
   {
-    "anonymous": false,
-    "inputs": [
+    anonymous: false,
+    inputs: [
       {
-        "indexed": true,
-        "internalType": "uint256",
-        "name": "carId",
-        "type": "uint256"
+        indexed: true,
+        internalType: "uint256",
+        name: "carId",
+        type: "uint256",
       },
       {
-        "indexed": true,
-        "internalType": "address",
-        "name": "owner",
-        "type": "address"
+        indexed: true,
+        internalType: "address",
+        name: "owner",
+        type: "address",
       },
       {
-        "indexed": false,
-        "internalType": "string",
-        "name": "brand",
-        "type": "string"
+        indexed: false,
+        internalType: "string",
+        name: "brand",
+        type: "string",
       },
       {
-        "indexed": false,
-        "internalType": "string",
-        "name": "model",
-        "type": "string"
+        indexed: false,
+        internalType: "string",
+        name: "model",
+        type: "string",
       },
       {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "dailyPrice",
-        "type": "uint256"
-      }
+        indexed: false,
+        internalType: "uint256",
+        name: "dailyPrice",
+        type: "uint256",
+      },
     ],
-    "name": "CarListed",
-    "type": "event"
+    name: "CarListed",
+    type: "event",
   },
   {
-    "anonymous": false,
-    "inputs": [
+    anonymous: false,
+    inputs: [
       {
-        "indexed": true,
-        "internalType": "uint256",
-        "name": "reservationId",
-        "type": "uint256"
+        indexed: true,
+        internalType: "uint256",
+        name: "reservationId",
+        type: "uint256",
       },
       {
-        "indexed": true,
-        "internalType": "uint256",
-        "name": "carId",
-        "type": "uint256"
+        indexed: true,
+        internalType: "uint256",
+        name: "carId",
+        type: "uint256",
       },
       {
-        "indexed": true,
-        "internalType": "address",
-        "name": "renter",
-        "type": "address"
+        indexed: true,
+        internalType: "address",
+        name: "renter",
+        type: "address",
       },
       {
-        "indexed": false,
-        "internalType": "uint64",
-        "name": "startDate",
-        "type": "uint64"
+        indexed: false,
+        internalType: "uint64",
+        name: "startDate",
+        type: "uint64",
       },
       {
-        "indexed": false,
-        "internalType": "uint64",
-        "name": "endDate",
-        "type": "uint64"
+        indexed: false,
+        internalType: "uint64",
+        name: "endDate",
+        type: "uint64",
       },
       {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "totalPrice",
-        "type": "uint256"
-      }
+        indexed: false,
+        internalType: "uint256",
+        name: "totalPrice",
+        type: "uint256",
+      },
     ],
-    "name": "CarRented",
-    "type": "event"
+    name: "CarRented",
+    type: "event",
   },
   {
-    "anonymous": false,
-    "inputs": [
+    anonymous: false,
+    inputs: [
       {
-        "indexed": true,
-        "internalType": "uint256",
-        "name": "reservationId",
-        "type": "uint256"
+        indexed: true,
+        internalType: "uint256",
+        name: "reservationId",
+        type: "uint256",
       },
       {
-        "indexed": true,
-        "internalType": "uint256",
-        "name": "carId",
-        "type": "uint256"
+        indexed: true,
+        internalType: "uint256",
+        name: "carId",
+        type: "uint256",
       },
       {
-        "indexed": true,
-        "internalType": "address",
-        "name": "renter",
-        "type": "address"
-      }
+        indexed: true,
+        internalType: "address",
+        name: "renter",
+        type: "address",
+      },
     ],
-    "name": "CarReturned",
-    "type": "event"
+    name: "CarReturned",
+    type: "event",
   },
   {
-    "anonymous": false,
-    "inputs": [
+    anonymous: false,
+    inputs: [
       {
-        "indexed": true,
-        "internalType": "uint256",
-        "name": "carId",
-        "type": "uint256"
+        indexed: true,
+        internalType: "uint256",
+        name: "carId",
+        type: "uint256",
       },
       {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "dailyPrice",
-        "type": "uint256"
+        indexed: false,
+        internalType: "uint256",
+        name: "dailyPrice",
+        type: "uint256",
       },
       {
-        "indexed": false,
-        "internalType": "bool",
-        "name": "isActive",
-        "type": "bool"
-      }
+        indexed: false,
+        internalType: "bool",
+        name: "isActive",
+        type: "bool",
+      },
     ],
-    "name": "CarUpdated",
-    "type": "event"
+    name: "CarUpdated",
+    type: "event",
   },
   {
-    "anonymous": false,
-    "inputs": [
+    anonymous: false,
+    inputs: [
       {
-        "indexed": true,
-        "internalType": "uint256",
-        "name": "reservationId",
-        "type": "uint256"
+        indexed: true,
+        internalType: "uint256",
+        name: "reservationId",
+        type: "uint256",
       },
       {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "amount",
-        "type": "uint256"
-      }
+        indexed: false,
+        internalType: "uint256",
+        name: "amount",
+        type: "uint256",
+      },
     ],
-    "name": "DepositPaid",
-    "type": "event"
+    name: "DepositPaid",
+    type: "event",
   },
   {
-    "anonymous": false,
-    "inputs": [
+    anonymous: false,
+    inputs: [
       {
-        "indexed": true,
-        "internalType": "uint256",
-        "name": "reservationId",
-        "type": "uint256"
+        indexed: true,
+        internalType: "uint256",
+        name: "reservationId",
+        type: "uint256",
       },
       {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "refundAmount",
-        "type": "uint256"
+        indexed: false,
+        internalType: "uint256",
+        name: "refundAmount",
+        type: "uint256",
       },
       {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "penaltyAmount",
-        "type": "uint256"
-      }
+        indexed: false,
+        internalType: "uint256",
+        name: "penaltyAmount",
+        type: "uint256",
+      },
     ],
-    "name": "DepositRefunded",
-    "type": "event"
+    name: "DepositRefunded",
+    type: "event",
   },
   {
-    "anonymous": false,
-    "inputs": [
+    anonymous: false,
+    inputs: [
       {
-        "indexed": true,
-        "internalType": "address",
-        "name": "owner",
-        "type": "address"
+        indexed: true,
+        internalType: "address",
+        name: "owner",
+        type: "address",
       },
       {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "amount",
-        "type": "uint256"
-      }
+        indexed: false,
+        internalType: "uint256",
+        name: "amount",
+        type: "uint256",
+      },
     ],
-    "name": "EarningsWithdrawn",
-    "type": "event"
+    name: "EarningsWithdrawn",
+    type: "event",
   },
   {
-    "anonymous": false,
-    "inputs": [
+    anonymous: false,
+    inputs: [
       {
-        "indexed": false,
-        "internalType": "uint64",
-        "name": "version",
-        "type": "uint64"
-      }
+        indexed: false,
+        internalType: "uint64",
+        name: "version",
+        type: "uint64",
+      },
     ],
-    "name": "Initialized",
-    "type": "event"
+    name: "Initialized",
+    type: "event",
   },
   {
-    "anonymous": false,
-    "inputs": [
+    anonymous: false,
+    inputs: [
       {
-        "indexed": true,
-        "internalType": "uint256",
-        "name": "reservationId",
-        "type": "uint256"
+        indexed: true,
+        internalType: "uint256",
+        name: "reservationId",
+        type: "uint256",
       },
       {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "daysLate",
-        "type": "uint256"
+        indexed: false,
+        internalType: "uint256",
+        name: "daysLate",
+        type: "uint256",
       },
       {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "penaltyAmount",
-        "type": "uint256"
-      }
+        indexed: false,
+        internalType: "uint256",
+        name: "penaltyAmount",
+        type: "uint256",
+      },
     ],
-    "name": "LateReturn",
-    "type": "event"
+    name: "LateReturn",
+    type: "event",
   },
   {
-    "anonymous": false,
-    "inputs": [
+    anonymous: false,
+    inputs: [
       {
-        "indexed": true,
-        "internalType": "address",
-        "name": "previousOwner",
-        "type": "address"
+        indexed: true,
+        internalType: "address",
+        name: "previousOwner",
+        type: "address",
       },
       {
-        "indexed": true,
-        "internalType": "address",
-        "name": "newOwner",
-        "type": "address"
-      }
+        indexed: true,
+        internalType: "address",
+        name: "newOwner",
+        type: "address",
+      },
     ],
-    "name": "OwnershipTransferred",
-    "type": "event"
+    name: "OwnershipTransferred",
+    type: "event",
   },
   {
-    "anonymous": false,
-    "inputs": [
+    anonymous: false,
+    inputs: [
       {
-        "indexed": true,
-        "internalType": "address",
-        "name": "recipient",
-        "type": "address"
+        indexed: true,
+        internalType: "address",
+        name: "recipient",
+        type: "address",
       },
       {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "amount",
-        "type": "uint256"
-      }
+        indexed: false,
+        internalType: "uint256",
+        name: "amount",
+        type: "uint256",
+      },
     ],
-    "name": "PlatformFeesWithdrawn",
-    "type": "event"
+    name: "PlatformFeesWithdrawn",
+    type: "event",
   },
   {
-    "anonymous": false,
-    "inputs": [
+    anonymous: false,
+    inputs: [
       {
-        "indexed": true,
-        "internalType": "uint256",
-        "name": "reservationId",
-        "type": "uint256"
+        indexed: true,
+        internalType: "uint256",
+        name: "reservationId",
+        type: "uint256",
       },
       {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "refundAmount",
-        "type": "uint256"
-      }
+        indexed: false,
+        internalType: "uint256",
+        name: "refundAmount",
+        type: "uint256",
+      },
     ],
-    "name": "ReservationCancelled",
-    "type": "event"
+    name: "ReservationCancelled",
+    type: "event",
   },
   {
-    "anonymous": false,
-    "inputs": [
+    anonymous: false,
+    inputs: [
       {
-        "indexed": true,
-        "internalType": "address",
-        "name": "implementation",
-        "type": "address"
-      }
+        indexed: true,
+        internalType: "address",
+        name: "implementation",
+        type: "address",
+      },
     ],
-    "name": "Upgraded",
-    "type": "event"
+    name: "Upgraded",
+    type: "event",
   },
   {
-    "inputs": [],
-    "name": "UPGRADE_INTERFACE_VERSION",
-    "outputs": [
+    inputs: [],
+    name: "UPGRADE_INTERFACE_VERSION",
+    outputs: [
       {
-        "internalType": "string",
-        "name": "",
-        "type": "string"
-      }
+        internalType: "string",
+        name: "",
+        type: "string",
+      },
     ],
-    "stateMutability": "view",
-    "type": "function"
+    stateMutability: "view",
+    type: "function",
   },
   {
-    "inputs": [],
-    "name": "accumulatedPlatformFees",
-    "outputs": [
+    inputs: [],
+    name: "accumulatedPlatformFees",
+    outputs: [
       {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
     ],
-    "stateMutability": "view",
-    "type": "function"
+    stateMutability: "view",
+    type: "function",
   },
   {
-    "inputs": [
+    inputs: [
       {
-        "internalType": "uint256",
-        "name": "carId",
-        "type": "uint256"
+        internalType: "uint256",
+        name: "carId",
+        type: "uint256",
       },
       {
-        "internalType": "uint64",
-        "name": "startDate",
-        "type": "uint64"
+        internalType: "uint64",
+        name: "startDate",
+        type: "uint64",
       },
       {
-        "internalType": "uint64",
-        "name": "endDate",
-        "type": "uint64"
-      }
+        internalType: "uint64",
+        name: "endDate",
+        type: "uint64",
+      },
     ],
-    "name": "calculateRentalPrice",
-    "outputs": [
+    name: "calculateRentalPrice",
+    outputs: [
       {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
     ],
-    "stateMutability": "view",
-    "type": "function"
+    stateMutability: "view",
+    type: "function",
   },
   {
-    "inputs": [
+    inputs: [
       {
-        "internalType": "uint256",
-        "name": "reservationId",
-        "type": "uint256"
-      }
+        internalType: "uint256",
+        name: "reservationId",
+        type: "uint256",
+      },
     ],
-    "name": "cancelReservation",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
+    name: "cancelReservation",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
   },
   {
-    "inputs": [
+    inputs: [
       {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
     ],
-    "name": "carDepositAmounts",
-    "outputs": [
+    name: "carDepositAmounts",
+    outputs: [
       {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
     ],
-    "stateMutability": "view",
-    "type": "function"
+    stateMutability: "view",
+    type: "function",
   },
   {
-    "inputs": [
+    inputs: [
       {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
     ],
-    "name": "depositRefunded",
-    "outputs": [
+    name: "depositRefunded",
+    outputs: [
       {
-        "internalType": "bool",
-        "name": "",
-        "type": "bool"
-      }
+        internalType: "bool",
+        name: "",
+        type: "bool",
+      },
     ],
-    "stateMutability": "view",
-    "type": "function"
+    stateMutability: "view",
+    type: "function",
   },
   {
-    "inputs": [
+    inputs: [
       {
-        "internalType": "uint256",
-        "name": "carId",
-        "type": "uint256"
-      }
+        internalType: "uint256",
+        name: "carId",
+        type: "uint256",
+      },
     ],
-    "name": "getCar",
-    "outputs": [
+    name: "getCar",
+    outputs: [
       {
-        "components": [
+        components: [
           {
-            "internalType": "uint256",
-            "name": "id",
-            "type": "uint256"
+            internalType: "uint256",
+            name: "id",
+            type: "uint256",
           },
           {
-            "internalType": "address",
-            "name": "owner",
-            "type": "address"
+            internalType: "address",
+            name: "owner",
+            type: "address",
           },
           {
-            "internalType": "string",
-            "name": "brand",
-            "type": "string"
+            internalType: "string",
+            name: "brand",
+            type: "string",
           },
           {
-            "internalType": "string",
-            "name": "model",
-            "type": "string"
+            internalType: "string",
+            name: "model",
+            type: "string",
           },
           {
-            "internalType": "uint16",
-            "name": "year",
-            "type": "uint16"
+            internalType: "uint16",
+            name: "year",
+            type: "uint16",
           },
           {
-            "internalType": "uint256",
-            "name": "dailyPrice",
-            "type": "uint256"
+            internalType: "uint256",
+            name: "dailyPrice",
+            type: "uint256",
           },
           {
-            "internalType": "bool",
-            "name": "isActive",
-            "type": "bool"
+            internalType: "bool",
+            name: "isActive",
+            type: "bool",
           },
           {
-            "internalType": "string",
-            "name": "metadataURI",
-            "type": "string"
-          }
+            internalType: "string",
+            name: "metadataURI",
+            type: "string",
+          },
         ],
-        "internalType": "struct CarRentalV1.Car",
-        "name": "",
-        "type": "tuple"
-      }
+        internalType: "struct CarRentalV1.Car",
+        name: "",
+        type: "tuple",
+      },
     ],
-    "stateMutability": "view",
-    "type": "function"
+    stateMutability: "view",
+    type: "function",
   },
   {
-    "inputs": [],
-    "name": "getCarCount",
-    "outputs": [
+    inputs: [],
+    name: "getCarCount",
+    outputs: [
       {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
     ],
-    "stateMutability": "view",
-    "type": "function"
+    stateMutability: "view",
+    type: "function",
   },
   {
-    "inputs": [
+    inputs: [
       {
-        "internalType": "uint256",
-        "name": "carId",
-        "type": "uint256"
-      }
+        internalType: "uint256",
+        name: "carId",
+        type: "uint256",
+      },
     ],
-    "name": "getCarReservations",
-    "outputs": [
+    name: "getCarReservations",
+    outputs: [
       {
-        "internalType": "uint256[]",
-        "name": "",
-        "type": "uint256[]"
-      }
+        internalType: "uint256[]",
+        name: "",
+        type: "uint256[]",
+      },
     ],
-    "stateMutability": "view",
-    "type": "function"
+    stateMutability: "view",
+    type: "function",
   },
   {
-    "inputs": [
+    inputs: [
       {
-        "internalType": "address",
-        "name": "carOwner",
-        "type": "address"
-      }
+        internalType: "address",
+        name: "carOwner",
+        type: "address",
+      },
     ],
-    "name": "getOwnerEarnings",
-    "outputs": [
+    name: "getOwnerEarnings",
+    outputs: [
       {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
     ],
-    "stateMutability": "view",
-    "type": "function"
+    stateMutability: "view",
+    type: "function",
   },
   {
-    "inputs": [
+    inputs: [
       {
-        "internalType": "uint256",
-        "name": "reservationId",
-        "type": "uint256"
-      }
+        internalType: "uint256",
+        name: "reservationId",
+        type: "uint256",
+      },
     ],
-    "name": "getReservation",
-    "outputs": [
+    name: "getReservation",
+    outputs: [
       {
-        "components": [
+        components: [
           {
-            "internalType": "uint256",
-            "name": "id",
-            "type": "uint256"
+            internalType: "uint256",
+            name: "id",
+            type: "uint256",
           },
           {
-            "internalType": "uint256",
-            "name": "carId",
-            "type": "uint256"
+            internalType: "uint256",
+            name: "carId",
+            type: "uint256",
           },
           {
-            "internalType": "address",
-            "name": "renter",
-            "type": "address"
+            internalType: "address",
+            name: "renter",
+            type: "address",
           },
           {
-            "internalType": "uint64",
-            "name": "startDate",
-            "type": "uint64"
+            internalType: "uint64",
+            name: "startDate",
+            type: "uint64",
           },
           {
-            "internalType": "uint64",
-            "name": "endDate",
-            "type": "uint64"
+            internalType: "uint64",
+            name: "endDate",
+            type: "uint64",
           },
           {
-            "internalType": "uint256",
-            "name": "totalPrice",
-            "type": "uint256"
+            internalType: "uint256",
+            name: "totalPrice",
+            type: "uint256",
           },
           {
-            "internalType": "bool",
-            "name": "isActive",
-            "type": "bool"
-          }
+            internalType: "bool",
+            name: "isActive",
+            type: "bool",
+          },
         ],
-        "internalType": "struct CarRentalV1.Reservation",
-        "name": "",
-        "type": "tuple"
-      }
+        internalType: "struct CarRentalV1.Reservation",
+        name: "",
+        type: "tuple",
+      },
     ],
-    "stateMutability": "view",
-    "type": "function"
+    stateMutability: "view",
+    type: "function",
   },
   {
-    "inputs": [],
-    "name": "getReservationCount",
-    "outputs": [
+    inputs: [],
+    name: "getReservationCount",
+    outputs: [
       {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
     ],
-    "stateMutability": "view",
-    "type": "function"
+    stateMutability: "view",
+    type: "function",
   },
   {
-    "inputs": [],
-    "name": "getVersion",
-    "outputs": [
+    inputs: [],
+    name: "getVersion",
+    outputs: [
       {
-        "internalType": "string",
-        "name": "",
-        "type": "string"
-      }
+        internalType: "string",
+        name: "",
+        type: "string",
+      },
     ],
-    "stateMutability": "pure",
-    "type": "function"
+    stateMutability: "pure",
+    type: "function",
   },
   {
-    "inputs": [
+    inputs: [
       {
-        "internalType": "address",
-        "name": "initialOwner",
-        "type": "address"
-      }
+        internalType: "address",
+        name: "initialOwner",
+        type: "address",
+      },
     ],
-    "name": "initialize",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
+    name: "initialize",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
   },
   {
-    "inputs": [
+    inputs: [
       {
-        "internalType": "uint256",
-        "name": "_latePenaltyPerDay",
-        "type": "uint256"
+        internalType: "uint256",
+        name: "_latePenaltyPerDay",
+        type: "uint256",
       },
       {
-        "internalType": "uint256",
-        "name": "_platformFeePercent",
-        "type": "uint256"
-      }
+        internalType: "uint256",
+        name: "_platformFeePercent",
+        type: "uint256",
+      },
     ],
-    "name": "initializeV2",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
+    name: "initializeV2",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
   },
   {
-    "inputs": [
+    inputs: [
       {
-        "internalType": "uint256",
-        "name": "carId",
-        "type": "uint256"
+        internalType: "uint256",
+        name: "carId",
+        type: "uint256",
       },
       {
-        "internalType": "uint64",
-        "name": "startDate",
-        "type": "uint64"
+        internalType: "uint64",
+        name: "startDate",
+        type: "uint64",
       },
       {
-        "internalType": "uint64",
-        "name": "endDate",
-        "type": "uint64"
-      }
+        internalType: "uint64",
+        name: "endDate",
+        type: "uint64",
+      },
     ],
-    "name": "isCarAvailable",
-    "outputs": [
+    name: "isCarAvailable",
+    outputs: [
       {
-        "internalType": "bool",
-        "name": "",
-        "type": "bool"
-      }
+        internalType: "bool",
+        name: "",
+        type: "bool",
+      },
     ],
-    "stateMutability": "view",
-    "type": "function"
+    stateMutability: "view",
+    type: "function",
   },
   {
-    "inputs": [],
-    "name": "latePenaltyPerDay",
-    "outputs": [
+    inputs: [],
+    name: "latePenaltyPerDay",
+    outputs: [
       {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
     ],
-    "stateMutability": "view",
-    "type": "function"
+    stateMutability: "view",
+    type: "function",
   },
   {
-    "inputs": [
+    inputs: [
       {
-        "internalType": "string",
-        "name": "brand",
-        "type": "string"
+        internalType: "string",
+        name: "brand",
+        type: "string",
       },
       {
-        "internalType": "string",
-        "name": "model",
-        "type": "string"
+        internalType: "string",
+        name: "model",
+        type: "string",
       },
       {
-        "internalType": "uint16",
-        "name": "year",
-        "type": "uint16"
+        internalType: "uint16",
+        name: "year",
+        type: "uint16",
       },
       {
-        "internalType": "uint256",
-        "name": "dailyPrice",
-        "type": "uint256"
+        internalType: "uint256",
+        name: "dailyPrice",
+        type: "uint256",
       },
       {
-        "internalType": "string",
-        "name": "metadataURI",
-        "type": "string"
-      }
+        internalType: "string",
+        name: "metadataURI",
+        type: "string",
+      },
     ],
-    "name": "listCar",
-    "outputs": [
+    name: "listCar",
+    outputs: [
       {
-        "internalType": "uint256",
-        "name": "carId",
-        "type": "uint256"
-      }
+        internalType: "uint256",
+        name: "carId",
+        type: "uint256",
+      },
     ],
-    "stateMutability": "nonpayable",
-    "type": "function"
+    stateMutability: "nonpayable",
+    type: "function",
   },
   {
-    "inputs": [],
-    "name": "owner",
-    "outputs": [
+    inputs: [],
+    name: "owner",
+    outputs: [
       {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
     ],
-    "stateMutability": "view",
-    "type": "function"
+    stateMutability: "view",
+    type: "function",
   },
   {
-    "inputs": [],
-    "name": "platformFeePercent",
-    "outputs": [
+    inputs: [],
+    name: "platformFeePercent",
+    outputs: [
       {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
     ],
-    "stateMutability": "view",
-    "type": "function"
+    stateMutability: "view",
+    type: "function",
   },
   {
-    "inputs": [],
-    "name": "proxiableUUID",
-    "outputs": [
+    inputs: [],
+    name: "proxiableUUID",
+    outputs: [
       {
-        "internalType": "bytes32",
-        "name": "",
-        "type": "bytes32"
-      }
+        internalType: "bytes32",
+        name: "",
+        type: "bytes32",
+      },
     ],
-    "stateMutability": "view",
-    "type": "function"
+    stateMutability: "view",
+    type: "function",
   },
   {
-    "inputs": [],
-    "name": "renounceOwnership",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
+    inputs: [],
+    name: "renounceOwnership",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
   },
   {
-    "inputs": [
+    inputs: [
       {
-        "internalType": "uint256",
-        "name": "carId",
-        "type": "uint256"
+        internalType: "uint256",
+        name: "carId",
+        type: "uint256",
       },
       {
-        "internalType": "uint64",
-        "name": "startDate",
-        "type": "uint64"
+        internalType: "uint64",
+        name: "startDate",
+        type: "uint64",
       },
       {
-        "internalType": "uint64",
-        "name": "endDate",
-        "type": "uint64"
-      }
+        internalType: "uint64",
+        name: "endDate",
+        type: "uint64",
+      },
     ],
-    "name": "rentCar",
-    "outputs": [
+    name: "rentCar",
+    outputs: [
       {
-        "internalType": "uint256",
-        "name": "reservationId",
-        "type": "uint256"
-      }
+        internalType: "uint256",
+        name: "reservationId",
+        type: "uint256",
+      },
     ],
-    "stateMutability": "payable",
-    "type": "function"
+    stateMutability: "payable",
+    type: "function",
   },
   {
-    "inputs": [
+    inputs: [
       {
-        "internalType": "uint256",
-        "name": "carId",
-        "type": "uint256"
+        internalType: "uint256",
+        name: "carId",
+        type: "uint256",
       },
       {
-        "internalType": "uint64",
-        "name": "startDate",
-        "type": "uint64"
+        internalType: "uint64",
+        name: "startDate",
+        type: "uint64",
       },
       {
-        "internalType": "uint64",
-        "name": "endDate",
-        "type": "uint64"
-      }
+        internalType: "uint64",
+        name: "endDate",
+        type: "uint64",
+      },
     ],
-    "name": "rentCarWithDeposit",
-    "outputs": [
+    name: "rentCarWithDeposit",
+    outputs: [
       {
-        "internalType": "uint256",
-        "name": "reservationId",
-        "type": "uint256"
-      }
+        internalType: "uint256",
+        name: "reservationId",
+        type: "uint256",
+      },
     ],
-    "stateMutability": "payable",
-    "type": "function"
+    stateMutability: "payable",
+    type: "function",
   },
   {
-    "inputs": [
+    inputs: [
       {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
     ],
-    "name": "reservationDeposits",
-    "outputs": [
+    name: "reservationDeposits",
+    outputs: [
       {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
     ],
-    "stateMutability": "view",
-    "type": "function"
+    stateMutability: "view",
+    type: "function",
   },
   {
-    "inputs": [
+    inputs: [
       {
-        "internalType": "uint256",
-        "name": "reservationId",
-        "type": "uint256"
-      }
+        internalType: "uint256",
+        name: "reservationId",
+        type: "uint256",
+      },
     ],
-    "name": "returnCar",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
+    name: "returnCar",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
   },
   {
-    "inputs": [
+    inputs: [
       {
-        "internalType": "uint256",
-        "name": "reservationId",
-        "type": "uint256"
-      }
+        internalType: "uint256",
+        name: "reservationId",
+        type: "uint256",
+      },
     ],
-    "name": "returnCarWithDeposit",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
+    name: "returnCarWithDeposit",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
   },
   {
-    "inputs": [
+    inputs: [
       {
-        "internalType": "uint256",
-        "name": "carId",
-        "type": "uint256"
+        internalType: "uint256",
+        name: "carId",
+        type: "uint256",
       },
       {
-        "internalType": "uint256",
-        "name": "depositAmount",
-        "type": "uint256"
-      }
+        internalType: "uint256",
+        name: "depositAmount",
+        type: "uint256",
+      },
     ],
-    "name": "setCarDeposit",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
+    name: "setCarDeposit",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
   },
   {
-    "inputs": [
+    inputs: [
       {
-        "internalType": "uint256",
-        "name": "_penalty",
-        "type": "uint256"
-      }
+        internalType: "uint256",
+        name: "_penalty",
+        type: "uint256",
+      },
     ],
-    "name": "setLatePenaltyPerDay",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
+    name: "setLatePenaltyPerDay",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
   },
   {
-    "inputs": [
+    inputs: [
       {
-        "internalType": "uint256",
-        "name": "_percent",
-        "type": "uint256"
-      }
+        internalType: "uint256",
+        name: "_percent",
+        type: "uint256",
+      },
     ],
-    "name": "setPlatformFeePercent",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
+    name: "setPlatformFeePercent",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
   },
   {
-    "inputs": [
+    inputs: [
       {
-        "internalType": "address",
-        "name": "newOwner",
-        "type": "address"
-      }
+        internalType: "address",
+        name: "newOwner",
+        type: "address",
+      },
     ],
-    "name": "transferOwnership",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
+    name: "transferOwnership",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
   },
   {
-    "inputs": [
+    inputs: [
       {
-        "internalType": "uint256",
-        "name": "carId",
-        "type": "uint256"
+        internalType: "uint256",
+        name: "carId",
+        type: "uint256",
       },
       {
-        "internalType": "uint256",
-        "name": "newDailyPrice",
-        "type": "uint256"
+        internalType: "uint256",
+        name: "newDailyPrice",
+        type: "uint256",
       },
       {
-        "internalType": "bool",
-        "name": "isActive",
-        "type": "bool"
-      }
+        internalType: "bool",
+        name: "isActive",
+        type: "bool",
+      },
     ],
-    "name": "updateCar",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
+    name: "updateCar",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
   },
   {
-    "inputs": [
+    inputs: [
       {
-        "internalType": "address",
-        "name": "newImplementation",
-        "type": "address"
+        internalType: "address",
+        name: "newImplementation",
+        type: "address",
       },
       {
-        "internalType": "bytes",
-        "name": "data",
-        "type": "bytes"
-      }
+        internalType: "bytes",
+        name: "data",
+        type: "bytes",
+      },
     ],
-    "name": "upgradeToAndCall",
-    "outputs": [],
-    "stateMutability": "payable",
-    "type": "function"
+    name: "upgradeToAndCall",
+    outputs: [],
+    stateMutability: "payable",
+    type: "function",
   },
   {
-    "inputs": [],
-    "name": "withdrawEarnings",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
+    inputs: [],
+    name: "withdrawEarnings",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
   },
   {
-    "inputs": [],
-    "name": "withdrawPlatformFees",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  }
+    inputs: [],
+    name: "withdrawPlatformFees",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
 ] as const;

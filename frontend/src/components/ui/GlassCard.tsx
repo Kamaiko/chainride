@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { cn } from "../../lib/cn";
 
 interface GlassCardProps {
   children: ReactNode;
@@ -6,10 +7,14 @@ interface GlassCardProps {
   className?: string;
 }
 
-export default function GlassCard({ children, hover, className = "" }: GlassCardProps) {
+export default function GlassCard({ children, hover, className }: GlassCardProps) {
   return (
     <div
-      className={`glass p-5 ${hover ? "transition-transform duration-200 hover:-translate-y-1" : ""} ${className}`}
+      className={cn(
+        "glass p-5",
+        hover && "transition-transform duration-200 hover:-translate-y-1",
+        className,
+      )}
     >
       {children}
     </div>

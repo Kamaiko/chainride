@@ -7,7 +7,15 @@ import Badge from "./ui/Badge";
 
 type CarCardProps = Omit<Car, "metadataURI">;
 
-export default function CarCard({ id, brand, model, year, dailyPrice, owner, isActive }: CarCardProps) {
+export default function CarCard({
+  id,
+  brand,
+  model,
+  year,
+  dailyPrice,
+  owner,
+  isActive,
+}: CarCardProps) {
   return (
     <Link to={`/car/${id}`} className="block">
       <GlassCard hover>

@@ -2,7 +2,13 @@ import { useAccount } from "wagmi";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { LayoutList, Car, Wallet, ArrowDownToLine, Power, Plus } from "lucide-react";
-import { useCarCount, useAllCars, useOwnerEarnings, useWithdrawEarnings, useUpdateCar } from "../hooks/useCarRental";
+import {
+  useCarCount,
+  useAllCars,
+  useOwnerEarnings,
+  useWithdrawEarnings,
+  useUpdateCar,
+} from "../hooks/useCarRental";
 import { extractResults } from "../lib/contractResults";
 import type { Car as CarType } from "../types/contracts";
 import { formatETH } from "../lib/format";
@@ -13,16 +19,7 @@ import GlassCard from "../components/ui/GlassCard";
 import EmptyState from "../components/ui/EmptyState";
 import LoadingSkeleton from "../components/ui/LoadingSkeleton";
 import TransactionButton from "../components/ui/TransactionButton";
-
-const stagger = {
-  hidden: {},
-  show: { transition: { staggerChildren: 0.08 } },
-};
-
-const fadeUp = {
-  hidden: { opacity: 0, y: 12 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.3 } },
-};
+import { stagger, fadeUp } from "../lib/animations";
 
 export default function MyListingsPage() {
   const { address, isConnected } = useAccount();
@@ -31,8 +28,9 @@ export default function MyListingsPage() {
   const { data: earnings } = useOwnerEarnings(address);
   const withdraw = useWithdrawEarnings();
 
-  const myCars = extractResults<CarType>(carsResult)
-    .filter((c) => c.owner.toLowerCase() === address?.toLowerCase());
+  const myCars = extractResults<CarType>(carsResult).filter(
+    (c) => c.owner.toLowerCase() === address?.toLowerCase(),
+  );
 
   if (!isConnected) {
     return (
@@ -105,12 +103,7 @@ export default function MyListingsPage() {
           />
         )}
 
-        <motion.div
-          variants={stagger}
-          initial="hidden"
-          animate="show"
-          className="space-y-4"
-        >
+        <motion.div variants={stagger} initial="hidden" animate="show" className="space-y-4">
           {myCars.map((car) => (
             <motion.div key={car.id.toString()} variants={fadeUp}>
               <CarListingCard car={car} />
@@ -129,7 +122,10 @@ function CarListingCard({ car }: { car: CarType }) {
     <GlassCard>
       <div className="flex items-start justify-between">
         <div>
-          <Link to={`/car/${car.id}`} className="font-semibold text-white hover:text-primary transition-colors">
+          <Link
+            to={`/car/${car.id}`}
+            className="font-semibold text-white hover:text-primary transition-colors"
+          >
             {car.brand} {car.model} ({car.year})
           </Link>
           <p className="text-sm text-slate-500">

@@ -84,7 +84,9 @@ textarea {
   color: #e2e8f0;
   padding: 0.5rem 0.75rem;
   font-size: 0.875rem;
-  transition: border-color 0.2s, box-shadow 0.2s;
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s;
   &:focus {
     outline: none;
     border-color: var(--color-primary);

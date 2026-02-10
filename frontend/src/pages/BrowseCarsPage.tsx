@@ -4,20 +4,11 @@ import { useCarCount, useAllCars } from "../hooks/useCarRental";
 import { extractResults } from "../lib/contractResults";
 import type { Car } from "../types/contracts";
 import CarCard from "../components/CarCard";
+import { stagger, fadeUp } from "../lib/animations";
 import AnimatedPage from "../components/ui/AnimatedPage";
 import PageHeader from "../components/ui/PageHeader";
 import LoadingSkeleton from "../components/ui/LoadingSkeleton";
 import EmptyState from "../components/ui/EmptyState";
-
-const stagger = {
-  hidden: {},
-  show: { transition: { staggerChildren: 0.08 } },
-};
-
-const fadeUp = {
-  hidden: { opacity: 0, y: 12 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.3 } },
-};
 
 export default function BrowseCarsPage() {
   const { data: carCount, isLoading: countLoading } = useCarCount();

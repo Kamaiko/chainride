@@ -1,7 +1,22 @@
+import type { FC } from "react";
+import { cn } from "../../lib/cn";
+
 type SkeletonType = "card" | "detail" | "list-item";
 
-function SkeletonPulse({ className = "" }: { className?: string }) {
-  return <div className={`bg-white/5 rounded-lg animate-pulse ${className}`} />;
+const componentMap: Record<SkeletonType, FC> = {
+  card: CardSkeleton,
+  detail: DetailSkeleton,
+  "list-item": ListItemSkeleton,
+};
+
+const layoutMap: Record<SkeletonType, string> = {
+  card: "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6",
+  detail: "space-y-4",
+  "list-item": "space-y-4",
+};
+
+function SkeletonPulse({ className }: { className?: string }) {
+  return <div className={cn("bg-white/5 rounded-lg animate-pulse", className)} />;
 }
 
 function CardSkeleton() {
@@ -55,11 +70,10 @@ interface LoadingSkeletonProps {
 }
 
 export default function LoadingSkeleton({ type, count = 1 }: LoadingSkeletonProps) {
-  const Component = type === "card" ? CardSkeleton : type === "detail" ? DetailSkeleton : ListItemSkeleton;
-  const layout = type === "card" ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" : "space-y-4";
+  const Component = componentMap[type];
 
   return (
-    <div className={layout}>
+    <div className={layoutMap[type]}>
       {Array.from({ length: count }, (_, i) => (
         <Component key={i} />
       ))}

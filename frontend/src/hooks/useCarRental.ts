@@ -1,5 +1,10 @@
 import { useEffect } from "react";
-import { useReadContract, useReadContracts, useWriteContract, useWaitForTransactionReceipt } from "wagmi";
+import {
+  useReadContract,
+  useReadContracts,
+  useWriteContract,
+  useWaitForTransactionReceipt,
+} from "wagmi";
 import { useQueryClient } from "@tanstack/react-query";
 import { carRentalConfig } from "../lib/contracts";
 
@@ -133,7 +138,7 @@ function useContractWrite() {
   // Invalidate all contract read caches when a transaction is confirmed
   useEffect(() => {
     if (isSuccess) {
-      queryClient.invalidateQueries({ queryKey: ['readContract'] });
+      queryClient.invalidateQueries({ queryKey: ["readContract"] });
     }
   }, [isSuccess, queryClient]);
 
@@ -143,9 +148,16 @@ function useContractWrite() {
 // ─── WRITE HOOKS ───
 
 export function useListCar() {
-  const { hash, writeContract, isPending, isConfirming, isSuccess, error, reset } = useContractWrite();
+  const { hash, writeContract, isPending, isConfirming, isSuccess, error, reset } =
+    useContractWrite();
 
-  const listCar = (brand: string, model: string, year: number, dailyPrice: bigint, metadataURI: string) => {
+  const listCar = (
+    brand: string,
+    model: string,
+    year: number,
+    dailyPrice: bigint,
+    metadataURI: string,
+  ) => {
     reset();
     writeContract({
       ...carRentalConfig,
@@ -158,7 +170,8 @@ export function useListCar() {
 }
 
 export function useRentCar() {
-  const { hash, writeContract, isPending, isConfirming, isSuccess, error, reset } = useContractWrite();
+  const { hash, writeContract, isPending, isConfirming, isSuccess, error, reset } =
+    useContractWrite();
 
   const rentCar = (carId: bigint, startDate: bigint, endDate: bigint, value: bigint) => {
     reset();
@@ -174,7 +187,8 @@ export function useRentCar() {
 }
 
 export function useRentCarWithDeposit() {
-  const { hash, writeContract, isPending, isConfirming, isSuccess, error, reset } = useContractWrite();
+  const { hash, writeContract, isPending, isConfirming, isSuccess, error, reset } =
+    useContractWrite();
 
   const rentCarWithDeposit = (carId: bigint, startDate: bigint, endDate: bigint, value: bigint) => {
     reset();
@@ -190,7 +204,8 @@ export function useRentCarWithDeposit() {
 }
 
 export function useReturnCar() {
-  const { hash, writeContract, isPending, isConfirming, isSuccess, error, reset } = useContractWrite();
+  const { hash, writeContract, isPending, isConfirming, isSuccess, error, reset } =
+    useContractWrite();
 
   const returnCar = (reservationId: bigint) => {
     reset();
@@ -205,7 +220,8 @@ export function useReturnCar() {
 }
 
 export function useCancelReservation() {
-  const { hash, writeContract, isPending, isConfirming, isSuccess, error, reset } = useContractWrite();
+  const { hash, writeContract, isPending, isConfirming, isSuccess, error, reset } =
+    useContractWrite();
 
   const cancelReservation = (reservationId: bigint) => {
     reset();
@@ -220,7 +236,8 @@ export function useCancelReservation() {
 }
 
 export function useWithdrawEarnings() {
-  const { hash, writeContract, isPending, isConfirming, isSuccess, error, reset } = useContractWrite();
+  const { hash, writeContract, isPending, isConfirming, isSuccess, error, reset } =
+    useContractWrite();
 
   const withdrawEarnings = () => {
     reset();
@@ -234,7 +251,8 @@ export function useWithdrawEarnings() {
 }
 
 export function useUpdateCar() {
-  const { hash, writeContract, isPending, isConfirming, isSuccess, error, reset } = useContractWrite();
+  const { hash, writeContract, isPending, isConfirming, isSuccess, error, reset } =
+    useContractWrite();
 
   const updateCar = (carId: bigint, newDailyPrice: bigint, isActive: boolean) => {
     reset();

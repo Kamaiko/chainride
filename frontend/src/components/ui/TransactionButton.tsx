@@ -1,5 +1,6 @@
 import { Loader2 } from "lucide-react";
 import type { ReactNode } from "react";
+import { cn } from "../../lib/cn";
 
 type ButtonVariant = "primary" | "success" | "danger";
 type ButtonSize = "sm" | "md";
@@ -48,7 +49,12 @@ export default function TransactionButton({
     <button
       onClick={onClick}
       disabled={disabled || isLoading}
-      className={`font-semibold transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 ${variantStyles[variant]} ${sizeStyles[size]} ${fullWidth ? "w-full" : ""}`}
+      className={cn(
+        "font-semibold transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2",
+        variantStyles[variant],
+        sizeStyles[size],
+        fullWidth && "w-full",
+      )}
     >
       {isLoading ? (
         <>
