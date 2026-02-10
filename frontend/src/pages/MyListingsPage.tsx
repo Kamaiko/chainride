@@ -1,19 +1,10 @@
 import { useAccount } from "wagmi";
 import { useCarCount, useAllCars, useOwnerEarnings, useWithdrawEarnings, useUpdateCar } from "../hooks/useCarRental";
+import { extractResults } from "../lib/contractResults";
+import type { Car } from "../types/contracts";
 import { formatETH } from "../lib/format";
 import TransactionStatus from "../components/TransactionStatus";
 import { Link } from "react-router-dom";
-
-type Car = {
-  id: bigint;
-  owner: string;
-  brand: string;
-  model: string;
-  year: number;
-  dailyPrice: bigint;
-  isActive: boolean;
-  metadataURI: string;
-};
 
 export default function MyListingsPage() {
   const { address, isConnected } = useAccount();
@@ -22,11 +13,8 @@ export default function MyListingsPage() {
   const { data: earnings } = useOwnerEarnings(address);
   const withdraw = useWithdrawEarnings();
 
-  const myCars: Car[] = (carsResult ?? [])
-    .map((r) => (r.status === "success" ? (r.result as Car) : null))
-    .filter((c): c is Car =>
-      c !== null && c.owner.toLowerCase() === address?.toLowerCase()
-    );
+  const myCars = extractResults<Car>(carsResult)
+    .filter((c) => c.owner.toLowerCase() === address?.toLowerCase());
 
   if (!isConnected) {
     return (

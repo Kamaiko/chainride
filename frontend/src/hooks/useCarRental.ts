@@ -109,6 +109,20 @@ export function useAllCars(count: bigint | undefined) {
   });
 }
 
+export function useAllReservations(count: bigint | undefined) {
+  const n = Number(count ?? 0n);
+  const contracts = Array.from({ length: n }, (_, i) => ({
+    ...carRentalConfig,
+    functionName: "getReservation" as const,
+    args: [BigInt(i + 1)] as const,
+  }));
+
+  return useReadContracts({
+    contracts,
+    query: { enabled: n > 0 },
+  });
+}
+
 // ─── WRITE HOOK HELPER ───
 
 function useContractWrite() {

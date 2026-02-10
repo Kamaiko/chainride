@@ -1,42 +1,18 @@
 import { useAccount } from "wagmi";
-import { useReservationCount, useReturnCar, useCancelReservation, useCar } from "../hooks/useCarRental";
-import { useReadContracts } from "wagmi";
-import { carRentalConfig } from "../lib/contracts";
+import { useReservationCount, useAllReservations, useReturnCar, useCancelReservation, useCar } from "../hooks/useCarRental";
+import { extractResults } from "../lib/contractResults";
+import type { Reservation } from "../types/contracts";
 import { formatETH } from "../lib/format";
 import { fromTimestamp, formatDate } from "../lib/dates";
 import TransactionStatus from "../components/TransactionStatus";
 
-type Reservation = {
-  id: bigint;
-  carId: bigint;
-  renter: string;
-  startDate: bigint;
-  endDate: bigint;
-  totalPrice: bigint;
-  isActive: boolean;
-};
-
 export default function MyRentalsPage() {
   const { address, isConnected } = useAccount();
   const { data: resCount } = useReservationCount();
+  const { data: resResults, isLoading } = useAllReservations(resCount);
 
-  const n = Number(resCount ?? 0n);
-  const contracts = Array.from({ length: n }, (_, i) => ({
-    ...carRentalConfig,
-    functionName: "getReservation" as const,
-    args: [BigInt(i + 1)] as const,
-  }));
-
-  const { data: resResults, isLoading } = useReadContracts({
-    contracts,
-    query: { enabled: n > 0 },
-  });
-
-  const myReservations: Reservation[] = (resResults ?? [])
-    .map((r) => (r.status === "success" ? (r.result as Reservation) : null))
-    .filter((r): r is Reservation =>
-      r !== null && r.renter.toLowerCase() === address?.toLowerCase()
-    );
+  const myReservations = extractResults<Reservation>(resResults)
+    .filter((r) => r.renter.toLowerCase() === address?.toLowerCase());
 
   if (!isConnected) {
     return (

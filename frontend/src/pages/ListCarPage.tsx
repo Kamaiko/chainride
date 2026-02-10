@@ -1,7 +1,8 @@
-import { useState, useEffect } from "react";
+import { useState, useCallback } from "react";
 import { parseEther } from "viem";
 import { useAccount } from "wagmi";
 import { useListCar } from "../hooks/useCarRental";
+import { useFormResetOnSuccess } from "../hooks/useFormResetOnSuccess";
 import TransactionStatus from "../components/TransactionStatus";
 
 export default function ListCarPage() {
@@ -11,20 +12,13 @@ export default function ListCarPage() {
   const [year, setYear] = useState("2024");
   const [dailyPrice, setDailyPrice] = useState("0.01");
   const [metadataURI, setMetadataURI] = useState("");
-  const [lastResetHash, setLastResetHash] = useState<string>();
 
   const { listCar, isPending, isConfirming, isSuccess, hash, error } = useListCar();
 
-  useEffect(() => {
-    if (isSuccess && hash && hash !== lastResetHash) {
-      setLastResetHash(hash);
-      setBrand("");
-      setModel("");
-      setYear("2024");
-      setDailyPrice("0.01");
-      setMetadataURI("");
-    }
-  }, [isSuccess, hash, lastResetHash]);
+  const resetForm = useCallback(() => {
+    setBrand(""); setModel(""); setYear("2024"); setDailyPrice("0.01"); setMetadataURI("");
+  }, []);
+  useFormResetOnSuccess(isSuccess, hash, resetForm);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();

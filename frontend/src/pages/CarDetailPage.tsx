@@ -1,7 +1,8 @@
 import { useParams } from "react-router-dom";
 import { useAccount } from "wagmi";
-import { useState, useEffect } from "react";
+import { useState, useCallback } from "react";
 import { useCar, useCarDepositAmount, useCalculateRentalPrice, useRentCar, useRentCarWithDeposit } from "../hooks/useCarRental";
+import { useFormResetOnSuccess } from "../hooks/useFormResetOnSuccess";
 import { formatETH, shortenAddress } from "../lib/format";
 import { toMidnightUTC, daysBetween } from "../lib/dates";
 import TransactionStatus from "../components/TransactionStatus";
@@ -29,15 +30,11 @@ export default function CarDetailPage() {
   const rentV2 = useRentCarWithDeposit();
   const useDeposit = deposit > 0n;
   const rent = useDeposit ? rentV2 : rentV1;
-  const [lastRentHash, setLastRentHash] = useState<string>();
 
-  useEffect(() => {
-    if (rent.isSuccess && rent.hash && rent.hash !== lastRentHash) {
-      setLastRentHash(rent.hash);
-      setStartStr("");
-      setEndStr("");
-    }
-  }, [rent.isSuccess, rent.hash, lastRentHash]);
+  const resetDates = useCallback(() => {
+    setStartStr(""); setEndStr("");
+  }, []);
+  useFormResetOnSuccess(rent.isSuccess, rent.hash, resetDates);
 
   const handleRent = () => {
     if (!validDates || !rentalPrice) return;

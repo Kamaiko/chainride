@@ -1,4 +1,6 @@
 import { useCarCount, useAllCars } from "../hooks/useCarRental";
+import { extractResults } from "../lib/contractResults";
+import type { Car } from "../types/contracts";
 import CarCard from "../components/CarCard";
 
 export default function BrowseCarsPage() {
@@ -6,19 +8,7 @@ export default function BrowseCarsPage() {
   const { data: carsResult, isLoading: carsLoading } = useAllCars(carCount);
 
   const isLoading = countLoading || carsLoading;
-
-  const cars = carsResult
-    ?.map((r) => (r.status === "success" ? r.result : null))
-    .filter(Boolean) as Array<{
-      id: bigint;
-      owner: string;
-      brand: string;
-      model: string;
-      year: number;
-      dailyPrice: bigint;
-      isActive: boolean;
-      metadataURI: string;
-    }> | undefined;
+  const cars = extractResults<Car>(carsResult);
 
   return (
     <div>
@@ -36,13 +26,13 @@ export default function BrowseCarsPage() {
         </div>
       )}
 
-      {!isLoading && (!cars || cars.length === 0) && (
+      {!isLoading && cars.length === 0 && (
         <div className="text-center py-16">
           <p className="text-gray-500 text-lg">Aucune voiture listee pour le moment.</p>
         </div>
       )}
 
-      {cars && cars.length > 0 && (
+      {cars.length > 0 && (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {cars.map((car) => (
             <CarCard

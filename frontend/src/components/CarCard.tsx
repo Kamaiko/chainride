@@ -1,16 +1,8 @@
 import { Link } from "react-router-dom";
-import { formatETH } from "../lib/format";
-import { shortenAddress } from "../lib/format";
+import { formatETH, shortenAddress } from "../lib/format";
+import type { Car } from "../types/contracts";
 
-interface CarCardProps {
-  id: bigint;
-  brand: string;
-  model: string;
-  year: number;
-  dailyPrice: bigint;
-  owner: string;
-  isActive: boolean;
-}
+type CarCardProps = Omit<Car, "metadataURI">;
 
 export default function CarCard({ id, brand, model, year, dailyPrice, owner, isActive }: CarCardProps) {
   return (
