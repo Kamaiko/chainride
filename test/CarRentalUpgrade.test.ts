@@ -112,4 +112,153 @@ describe("CarRental Upgrade V1 → V2", function () {
       ethers.parseEther("0.0075")
     );
   });
+
+  // ── TEST V2-2 : Retour a temps → depot rembourse integralement ──
+  it("devrait rembourser le depot en entier lors d'un retour a temps", async function () {
+    const [owner, carLister, renter] = await ethers.getSigners();
+
+    const V1Factory = await ethers.getContractFactory("CarRentalV1");
+    const proxy = await upgrades.deployProxy(V1Factory, [owner.address], {
+      kind: "uups",
+    });
+    await proxy.waitForDeployment();
+
+    const V2Factory = await ethers.getContractFactory("CarRentalV2");
+    const upgraded = await upgrades.upgradeProxy(
+      await proxy.getAddress(),
+      V2Factory,
+      {
+        call: {
+          fn: "initializeV2",
+          args: [ethers.parseEther("0.005"), 5],
+        },
+      }
+    );
+    const v2 = upgraded as unknown as CarRentalV2;
+
+    // Lister + definir depot
+    await v2
+      .connect(carLister)
+      .listCar("BMW", "M3", 2024, ethers.parseEther("0.01"), "");
+    await v2.connect(carLister).setCarDeposit(1, ethers.parseEther("0.1"));
+
+    // Louer avec depot
+    const start = futureDayTimestamp(5);
+    const end = futureDayTimestamp(8); // 3 jours
+    const rentalPrice = ethers.parseEther("0.03");
+    const deposit = ethers.parseEther("0.1");
+
+    await v2
+      .connect(renter)
+      .rentCarWithDeposit(1, start, end, { value: rentalPrice + deposit });
+
+    // Retourner a temps → depot rembourse integralement
+    await expect(
+      v2.connect(renter).returnCarWithDeposit(1)
+    ).to.changeEtherBalance(renter, deposit);
+
+    expect(await v2.depositRefunded(1)).to.be.true;
+  });
+
+  // ── TEST V2-3 : Retour en retard → penalite deduite du depot ──
+  it("devrait deduire une penalite du depot lors d'un retour en retard", async function () {
+    const [owner, carLister, renter] = await ethers.getSigners();
+
+    const V1Factory = await ethers.getContractFactory("CarRentalV1");
+    const proxy = await upgrades.deployProxy(V1Factory, [owner.address], {
+      kind: "uups",
+    });
+    await proxy.waitForDeployment();
+
+    const V2Factory = await ethers.getContractFactory("CarRentalV2");
+    const upgraded = await upgrades.upgradeProxy(
+      await proxy.getAddress(),
+      V2Factory,
+      {
+        call: {
+          fn: "initializeV2",
+          args: [ethers.parseEther("0.01"), 0], // 0.01 ETH penalite/jour, 0% frais
+        },
+      }
+    );
+    const v2 = upgraded as unknown as CarRentalV2;
+
+    // Lister + definir depot
+    await v2
+      .connect(carLister)
+      .listCar("Audi", "RS6", 2024, ethers.parseEther("0.01"), "");
+    await v2.connect(carLister).setCarDeposit(1, ethers.parseEther("0.05"));
+
+    // Louer : start = demain, end = apres-demain (1 jour)
+    const start = futureDayTimestamp(1);
+    const end = futureDayTimestamp(2);
+    const rentalPrice = ethers.parseEther("0.01");
+    const deposit = ethers.parseEther("0.05");
+
+    await v2
+      .connect(renter)
+      .rentCarWithDeposit(1, start, end, { value: rentalPrice + deposit });
+
+    // Avancer le temps de 4 jours apres la fin → 2 jours de retard
+    await ethers.provider.send("evm_increaseTime", [4 * 86400]);
+    await ethers.provider.send("evm_mine", []);
+
+    // Retourner en retard : penalite = 2 jours * 0.01 = 0.02 ETH
+    const tx = await v2.connect(renter).returnCarWithDeposit(1);
+
+    await expect(tx).to.emit(v2, "LateReturn");
+    await expect(tx).to.emit(v2, "DepositRefunded");
+
+    // Le proprietaire recoit la penalite en earnings
+    const ownerEarnings = await v2.getOwnerEarnings(carLister.address);
+    expect(ownerEarnings).to.be.gt(0);
+  });
+
+  // ── TEST V2-4 : Retrait des frais de plateforme par l'owner ──
+  it("devrait permettre a l'owner de retirer les frais de plateforme", async function () {
+    const [owner, carLister, renter] = await ethers.getSigners();
+
+    const V1Factory = await ethers.getContractFactory("CarRentalV1");
+    const proxy = await upgrades.deployProxy(V1Factory, [owner.address], {
+      kind: "uups",
+    });
+    await proxy.waitForDeployment();
+
+    const V2Factory = await ethers.getContractFactory("CarRentalV2");
+    const upgraded = await upgrades.upgradeProxy(
+      await proxy.getAddress(),
+      V2Factory,
+      {
+        call: {
+          fn: "initializeV2",
+          args: [ethers.parseEther("0.005"), 10], // 10% frais
+        },
+      }
+    );
+    const v2 = upgraded as unknown as CarRentalV2;
+
+    // Lister (pas de depot)
+    await v2
+      .connect(carLister)
+      .listCar("Porsche", "911", 2024, ethers.parseEther("0.1"), "");
+
+    // Louer via rentCar (V1 — pas de depot)
+    const rentalPrice = ethers.parseEther("0.1"); // 1 jour
+    await v2
+      .connect(renter)
+      .rentCarWithDeposit(1, futureDayTimestamp(5), futureDayTimestamp(6), {
+        value: rentalPrice,
+      });
+
+    // Frais = 10% de 0.1 = 0.01 ETH
+    const fees = await v2.accumulatedPlatformFees();
+    expect(fees).to.equal(ethers.parseEther("0.01"));
+
+    // Retirer les frais
+    await expect(
+      v2.connect(owner).withdrawPlatformFees()
+    ).to.changeEtherBalance(owner, fees);
+
+    expect(await v2.accumulatedPlatformFees()).to.equal(0);
+  });
 });

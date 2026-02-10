@@ -119,7 +119,7 @@ function useContractWrite() {
   // Invalidate all contract read caches when a transaction is confirmed
   useEffect(() => {
     if (isSuccess) {
-      queryClient.invalidateQueries();
+      queryClient.invalidateQueries({ queryKey: ['readContract'] });
     }
   }, [isSuccess, queryClient]);
 

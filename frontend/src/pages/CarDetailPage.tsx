@@ -29,13 +29,15 @@ export default function CarDetailPage() {
   const rentV2 = useRentCarWithDeposit();
   const useDeposit = deposit > 0n;
   const rent = useDeposit ? rentV2 : rentV1;
+  const [lastRentHash, setLastRentHash] = useState<string>();
 
   useEffect(() => {
-    if (rent.isSuccess) {
+    if (rent.isSuccess && rent.hash && rent.hash !== lastRentHash) {
+      setLastRentHash(rent.hash);
       setStartStr("");
       setEndStr("");
     }
-  }, [rent.isSuccess]);
+  }, [rent.isSuccess, rent.hash, lastRentHash]);
 
   const handleRent = () => {
     if (!validDates || !rentalPrice) return;

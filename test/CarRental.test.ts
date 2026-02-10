@@ -271,4 +271,73 @@ describe("CarRentalV1", function () {
 
     expect(await contract.getOwnerEarnings(carLister.address)).to.equal(0);
   });
+
+  // ── TEST 11 : updateCar modifie prix et statut ──
+  it("devrait modifier le prix et desactiver une voiture via updateCar", async function () {
+    await contract
+      .connect(carLister)
+      .listCar("Nissan", "Leaf", 2023, DAILY_PRICE, "");
+
+    const newPrice = ethers.parseEther("0.05");
+
+    const tx = await contract
+      .connect(carLister)
+      .updateCar(1, newPrice, false);
+
+    await expect(tx)
+      .to.emit(contract, "CarUpdated")
+      .withArgs(1, newPrice, false);
+
+    const car = await contract.getCar(1);
+    expect(car.dailyPrice).to.equal(newPrice);
+    expect(car.isActive).to.be.false;
+  });
+
+  // ── TEST 12 : updateCar revert si non-proprietaire ──
+  it("devrait rejeter updateCar par un non-proprietaire", async function () {
+    await contract
+      .connect(carLister)
+      .listCar("Nissan", "Leaf", 2023, DAILY_PRICE, "");
+
+    await expect(
+      contract.connect(other).updateCar(1, DAILY_PRICE, false)
+    ).to.be.revertedWithCustomError(contract, "NotCarOwner");
+  });
+
+  // ── TEST 13 : listCar revert avec prix 0 ──
+  it("devrait rejeter listCar avec un prix de 0", async function () {
+    await expect(
+      contract.connect(carLister).listCar("Test", "Car", 2024, 0, "")
+    ).to.be.revertedWith("Price must be > 0");
+  });
+
+  // ── TEST 14 : listCar revert avec marque vide ──
+  it("devrait rejeter listCar avec une marque vide", async function () {
+    await expect(
+      contract.connect(carLister).listCar("", "Car", 2024, DAILY_PRICE, "")
+    ).to.be.revertedWith("Brand required");
+  });
+
+  // ── TEST 15 : annulation de reservation avant debut ──
+  it("devrait annuler une reservation et rembourser le locataire", async function () {
+    await contract
+      .connect(carLister)
+      .listCar("Volvo", "XC40", 2024, DAILY_PRICE, "");
+
+    const rentalPrice = DAILY_PRICE * 3n;
+    await contract
+      .connect(renter)
+      .rentCar(1, futureDayTimestamp(10), futureDayTimestamp(13), {
+        value: rentalPrice,
+      });
+
+    await expect(
+      contract.connect(renter).cancelReservation(1)
+    ).to.changeEtherBalance(renter, rentalPrice);
+
+    const res = await contract.getReservation(1);
+    expect(res.isActive).to.be.false;
+
+    expect(await contract.getOwnerEarnings(carLister.address)).to.equal(0);
+  });
 });

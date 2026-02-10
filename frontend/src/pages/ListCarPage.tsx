@@ -11,18 +11,20 @@ export default function ListCarPage() {
   const [year, setYear] = useState("2024");
   const [dailyPrice, setDailyPrice] = useState("0.01");
   const [metadataURI, setMetadataURI] = useState("");
+  const [lastResetHash, setLastResetHash] = useState<string>();
 
   const { listCar, isPending, isConfirming, isSuccess, hash, error } = useListCar();
 
   useEffect(() => {
-    if (isSuccess) {
+    if (isSuccess && hash && hash !== lastResetHash) {
+      setLastResetHash(hash);
       setBrand("");
       setModel("");
       setYear("2024");
       setDailyPrice("0.01");
       setMetadataURI("");
     }
-  }, [isSuccess]);
+  }, [isSuccess, hash, lastResetHash]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
