@@ -9,7 +9,7 @@ export default function NetworkGuard() {
   const { switchChain } = useSwitchChain();
 
   if (!isConnected) return null;
-  if (SUPPORTED_CHAIN_IDS.includes(chainId)) return null;
+  if (SUPPORTED_CHAIN_IDS.includes(chainId as typeof SUPPORTED_CHAIN_IDS[number])) return null;
 
   return (
     <div className="bg-amber-50 border-b border-amber-200 px-4 py-3">

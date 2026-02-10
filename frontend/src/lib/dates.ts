@@ -1,6 +1,6 @@
 /** Align a Date to midnight UTC and return Unix timestamp (seconds) */
 export function toMidnightUTC(date: Date): bigint {
-  const d = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
+  const d = new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate()));
   return BigInt(Math.floor(d.getTime() / 1000));
 }
 

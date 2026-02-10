@@ -157,9 +157,9 @@ npx hardhat verify --network sepolia ADRESSE_IMPLEMENTATION
 
 | Contrat | Adresse | Lien |
 |---------|---------|------|
-| Proxy (V2) | `A remplir` | [Etherscan](https://sepolia.etherscan.io/address/A_REMPLIR) |
-| Implementation V1 | `A remplir` | |
-| Implementation V2 | `A remplir` | |
+| Proxy (V2) | `0x2BCA7b901cEc9049EBCF2695Be33735BeDc7f748` | [Etherscan](https://sepolia.etherscan.io/address/0x2BCA7b901cEc9049EBCF2695Be33735BeDc7f748) |
+| Implementation V1 | `0xA6a0D9E26f3431b9E2Fcdd961C26EF2cB119B346` | |
+| Implementation V2 | `0xA6a0D9E26f3431b9E2Fcdd961C26EF2cB119B346` | |
 
 ## Architecture du contrat
 

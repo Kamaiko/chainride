@@ -1,11 +1,9 @@
 import { useParams } from "react-router-dom";
 import { useAccount } from "wagmi";
 import { useState } from "react";
-import { parseEther } from "viem";
 import { useCar, useCarDepositAmount, useCalculateRentalPrice, useRentCar, useRentCarWithDeposit } from "../hooks/useCarRental";
 import { formatETH, shortenAddress } from "../lib/format";
 import { toMidnightUTC, daysBetween } from "../lib/dates";
-import { getErrorMessage } from "../lib/errors";
 import TransactionStatus from "../components/TransactionStatus";
 
 export default function CarDetailPage() {
