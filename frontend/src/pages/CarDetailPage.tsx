@@ -1,11 +1,18 @@
 import { useParams } from "react-router-dom";
 import { useAccount } from "wagmi";
 import { useState, useCallback } from "react";
+import { Coins, Shield, User, Hash, AlertTriangle } from "lucide-react";
 import { useCar, useCarDepositAmount, useCalculateRentalPrice, useRentCar, useRentCarWithDeposit } from "../hooks/useCarRental";
 import { useFormResetOnSuccess } from "../hooks/useFormResetOnSuccess";
 import { formatETH, shortenAddress } from "../lib/format";
 import { toMidnightUTC, daysBetween } from "../lib/dates";
 import TransactionStatus from "../components/TransactionStatus";
+import AnimatedPage from "../components/ui/AnimatedPage";
+import GlassCard from "../components/ui/GlassCard";
+import Badge from "../components/ui/Badge";
+import LoadingSkeleton from "../components/ui/LoadingSkeleton";
+import EmptyState from "../components/ui/EmptyState";
+import TransactionButton from "../components/ui/TransactionButton";
 
 export default function CarDetailPage() {
   const { carId } = useParams<{ carId: string }>();
@@ -47,122 +54,150 @@ export default function CarDetailPage() {
 
   if (isLoading) {
     return (
-      <div className="animate-pulse space-y-4">
-        <div className="h-8 bg-gray-200 rounded w-1/3" />
-        <div className="h-4 bg-gray-200 rounded w-1/4" />
-        <div className="h-48 bg-gray-200 rounded" />
-      </div>
+      <AnimatedPage>
+        <LoadingSkeleton type="detail" />
+      </AnimatedPage>
     );
   }
 
   if (!car) {
-    return <p className="text-red-500">Voiture introuvable (ID: {carId})</p>;
+    return (
+      <AnimatedPage>
+        <EmptyState
+          icon={<AlertTriangle className="h-12 w-12" />}
+          title="Voiture introuvable"
+          description={`Aucune voiture trouvee avec l'ID ${carId}.`}
+          actionLabel="Retour aux autos"
+          actionTo="/browse"
+        />
+      </AnimatedPage>
+    );
   }
 
   const isOwner = address?.toLowerCase() === car.owner.toLowerCase();
 
   return (
-    <div className="max-w-2xl mx-auto space-y-8">
-      {/* Car info */}
-      <div className="bg-white rounded-xl shadow-sm border p-6">
-        <div className="flex items-start justify-between">
-          <div>
-            <h1 className="text-3xl font-bold text-gray-900">
-              {car.brand} {car.model}
-            </h1>
-            <p className="text-gray-500">{car.year}</p>
-          </div>
-          <span
-            className={`text-sm font-medium px-3 py-1 rounded-full ${
-              car.isActive ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"
-            }`}
-          >
-            {car.isActive ? "Disponible" : "Inactive"}
-          </span>
-        </div>
-
-        <div className="mt-6 grid grid-cols-2 gap-4 text-sm">
-          <div>
-            <p className="text-gray-500">Prix journalier</p>
-            <p className="text-xl font-bold text-blue-600">{formatETH(car.dailyPrice)} ETH</p>
-          </div>
-          <div>
-            <p className="text-gray-500">Depot de garantie</p>
-            <p className="text-xl font-bold text-gray-900">
-              {deposit > 0n ? `${formatETH(deposit)} ETH` : "Aucun"}
-            </p>
-          </div>
-          <div>
-            <p className="text-gray-500">Proprietaire</p>
-            <p className="font-mono text-sm">{shortenAddress(car.owner)}</p>
-          </div>
-          <div>
-            <p className="text-gray-500">ID</p>
-            <p className="font-mono text-sm">#{car.id.toString()}</p>
-          </div>
-        </div>
-      </div>
-
-      {/* Rent form */}
-      {car.isActive && !isOwner && (
-        <div className="bg-white rounded-xl shadow-sm border p-6 space-y-4">
-          <h2 className="text-xl font-semibold text-gray-900">Louer cette auto</h2>
-
-          <div className="grid grid-cols-2 gap-4">
+    <AnimatedPage>
+      <div className="max-w-2xl mx-auto space-y-8">
+        {/* Car info */}
+        <GlassCard>
+          <div className="flex items-start justify-between">
             <div>
-              <label className="block text-sm text-gray-600 mb-1">Date de debut</label>
-              <input
-                type="date"
-                value={startStr}
-                onChange={(e) => setStartStr(e.target.value)}
-                className="w-full border rounded-lg px-3 py-2 text-sm"
-              />
+              <h1 className="text-3xl font-bold text-white">
+                {car.brand} {car.model}
+              </h1>
+              <p className="text-slate-400">{car.year}</p>
             </div>
-            <div>
-              <label className="block text-sm text-gray-600 mb-1">Date de fin</label>
-              <input
-                type="date"
-                value={endStr}
-                onChange={(e) => setEndStr(e.target.value)}
-                className="w-full border rounded-lg px-3 py-2 text-sm"
-              />
+            <Badge variant={car.isActive ? "success" : "error"}>
+              {car.isActive ? "Disponible" : "Inactive"}
+            </Badge>
+          </div>
+
+          <div className="mt-6 grid grid-cols-2 gap-4 text-sm">
+            <div className="flex items-start gap-2">
+              <Coins className="h-4 w-4 text-primary mt-0.5" />
+              <div>
+                <p className="text-slate-500">Prix journalier</p>
+                <p className="text-xl font-bold gradient-text">{formatETH(car.dailyPrice)} ETH</p>
+              </div>
+            </div>
+            <div className="flex items-start gap-2">
+              <Shield className="h-4 w-4 text-primary mt-0.5" />
+              <div>
+                <p className="text-slate-500">Depot de garantie</p>
+                <p className="text-xl font-bold text-white">
+                  {deposit > 0n ? `${formatETH(deposit)} ETH` : "Aucun"}
+                </p>
+              </div>
+            </div>
+            <div className="flex items-start gap-2">
+              <User className="h-4 w-4 text-slate-500 mt-0.5" />
+              <div>
+                <p className="text-slate-500">Proprietaire</p>
+                <p className="font-mono text-sm text-slate-300">{shortenAddress(car.owner)}</p>
+              </div>
+            </div>
+            <div className="flex items-start gap-2">
+              <Hash className="h-4 w-4 text-slate-500 mt-0.5" />
+              <div>
+                <p className="text-slate-500">ID</p>
+                <p className="font-mono text-sm text-slate-300">#{car.id.toString()}</p>
+              </div>
             </div>
           </div>
+        </GlassCard>
 
-          {validDates && rentalPrice !== undefined && (
-            <div className="bg-blue-50 rounded-lg p-4 space-y-1 text-sm">
-              <p>Duree : <strong>{daysBetween(startDate, endDate)} jour(s)</strong></p>
-              <p>Location : <strong>{formatETH(rentalPrice)} ETH</strong></p>
-              {deposit > 0n && <p>Depot : <strong>{formatETH(deposit)} ETH</strong></p>}
-              <p className="text-lg font-bold text-blue-700 pt-1">
-                Total : {formatETH(totalCost)} ETH
+        {/* Rent form */}
+        {car.isActive && !isOwner && (
+          <GlassCard>
+            <h2 className="text-xl font-semibold text-white mb-4">Louer cette auto</h2>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm text-slate-400 mb-1">Date de debut</label>
+                <input
+                  type="date"
+                  value={startStr}
+                  onChange={(e) => setStartStr(e.target.value)}
+                  className="w-full"
+                />
+              </div>
+              <div>
+                <label className="block text-sm text-slate-400 mb-1">Date de fin</label>
+                <input
+                  type="date"
+                  value={endStr}
+                  onChange={(e) => setEndStr(e.target.value)}
+                  className="w-full"
+                />
+              </div>
+            </div>
+
+            {validDates && rentalPrice !== undefined && (
+              <div className="glass-subtle p-4 space-y-1 text-sm mt-4">
+                <p className="text-slate-300">Duree : <strong>{daysBetween(startDate, endDate)} jour(s)</strong></p>
+                <p className="text-slate-300">Location : <strong>{formatETH(rentalPrice)} ETH</strong></p>
+                {deposit > 0n && <p className="text-slate-300">Depot : <strong>{formatETH(deposit)} ETH</strong></p>}
+                <p className="text-lg font-bold gradient-text pt-1">
+                  Total : {formatETH(totalCost)} ETH
+                </p>
+              </div>
+            )}
+
+            <div className="mt-4 space-y-3">
+              <TransactionButton
+                onClick={handleRent}
+                disabled={!validDates}
+                isPending={rent.isPending}
+                isConfirming={rent.isConfirming}
+                icon={<Coins className="h-4 w-4" />}
+                fullWidth
+              >
+                Payer et louer
+              </TransactionButton>
+
+              <TransactionStatus
+                isPending={rent.isPending}
+                isConfirming={rent.isConfirming}
+                isSuccess={rent.isSuccess}
+                hash={rent.hash}
+                error={rent.error}
+              />
+            </div>
+          </GlassCard>
+        )}
+
+        {isOwner && (
+          <GlassCard className="border-amber-500/20!">
+            <div className="flex items-center gap-2 text-amber-400">
+              <AlertTriangle className="h-5 w-5" />
+              <p className="text-sm">
+                Vous etes le proprietaire de cette voiture. Vous ne pouvez pas la louer.
               </p>
             </div>
-          )}
-
-          <button
-            onClick={handleRent}
-            disabled={!validDates || rent.isPending || rent.isConfirming}
-            className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-          >
-            {rent.isPending ? "Confirmation..." : rent.isConfirming ? "En cours..." : "Payer et louer"}
-          </button>
-
-          <TransactionStatus
-            isPending={rent.isPending}
-            isConfirming={rent.isConfirming}
-            isSuccess={rent.isSuccess}
-            hash={rent.hash}
-            error={rent.error}
-          />
-        </div>
-      )}
-
-      {isOwner && (
-        <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 text-sm text-amber-800">
-          Vous etes le proprietaire de cette voiture. Vous ne pouvez pas la louer.
-        </div>
-      )}
-    </div>
+          </GlassCard>
+        )}
+      </div>
+    </AnimatedPage>
   );
 }

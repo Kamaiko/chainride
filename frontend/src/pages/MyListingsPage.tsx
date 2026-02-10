@@ -1,10 +1,28 @@
 import { useAccount } from "wagmi";
+import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
+import { LayoutList, Car, Wallet, ArrowDownToLine, Power, Plus } from "lucide-react";
 import { useCarCount, useAllCars, useOwnerEarnings, useWithdrawEarnings, useUpdateCar } from "../hooks/useCarRental";
 import { extractResults } from "../lib/contractResults";
-import type { Car } from "../types/contracts";
+import type { Car as CarType } from "../types/contracts";
 import { formatETH } from "../lib/format";
 import TransactionStatus from "../components/TransactionStatus";
-import { Link } from "react-router-dom";
+import AnimatedPage from "../components/ui/AnimatedPage";
+import PageHeader from "../components/ui/PageHeader";
+import GlassCard from "../components/ui/GlassCard";
+import EmptyState from "../components/ui/EmptyState";
+import LoadingSkeleton from "../components/ui/LoadingSkeleton";
+import TransactionButton from "../components/ui/TransactionButton";
+
+const stagger = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.08 } },
+};
+
+const fadeUp = {
+  hidden: { opacity: 0, y: 12 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.3 } },
+};
 
 export default function MyListingsPage() {
   const { address, isConnected } = useAccount();
@@ -13,96 +31,121 @@ export default function MyListingsPage() {
   const { data: earnings } = useOwnerEarnings(address);
   const withdraw = useWithdrawEarnings();
 
-  const myCars = extractResults<Car>(carsResult)
+  const myCars = extractResults<CarType>(carsResult)
     .filter((c) => c.owner.toLowerCase() === address?.toLowerCase());
 
   if (!isConnected) {
     return (
-      <div className="text-center py-16">
-        <p className="text-gray-500 text-lg">Connectez votre portefeuille pour voir vos annonces.</p>
-      </div>
+      <AnimatedPage>
+        <EmptyState
+          icon={<Wallet className="h-12 w-12" />}
+          title="Portefeuille requis"
+          description="Connectez votre portefeuille pour voir vos annonces."
+        />
+      </AnimatedPage>
     );
   }
 
   return (
-    <div className="space-y-8">
-      <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold text-gray-900">Mes annonces</h1>
-        <Link
-          to="/list"
-          className="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors"
-        >
-          + Nouvelle annonce
-        </Link>
-      </div>
+    <AnimatedPage>
+      <PageHeader
+        icon={<LayoutList className="h-7 w-7" />}
+        title="Mes annonces"
+        action={
+          <Link to="/list" className="gradient-btn px-4 py-2 text-sm flex items-center gap-1.5">
+            <Plus className="h-4 w-4" />
+            Nouvelle annonce
+          </Link>
+        }
+      />
 
-      {/* Earnings */}
-      <div className="bg-white rounded-xl shadow-sm border p-6">
-        <div className="flex items-center justify-between">
-          <div>
-            <p className="text-sm text-gray-500">Gains disponibles</p>
-            <p className="text-2xl font-bold text-green-600">
-              {earnings !== undefined ? formatETH(earnings) : "..."} ETH
-            </p>
+      <div className="space-y-8">
+        {/* Earnings */}
+        <GlassCard>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <Wallet className="h-5 w-5 text-primary" />
+              <div>
+                <p className="text-sm text-slate-500">Gains disponibles</p>
+                <p className="text-2xl font-bold gradient-text">
+                  {earnings !== undefined ? formatETH(earnings) : "..."} ETH
+                </p>
+              </div>
+            </div>
+            <TransactionButton
+              onClick={() => withdraw.withdrawEarnings()}
+              disabled={!earnings || earnings === 0n}
+              isPending={withdraw.isPending}
+              isConfirming={withdraw.isConfirming}
+              variant="success"
+              icon={<ArrowDownToLine className="h-4 w-4" />}
+            >
+              Retirer
+            </TransactionButton>
           </div>
-          <button
-            onClick={() => withdraw.withdrawEarnings()}
-            disabled={!earnings || earnings === 0n || withdraw.isPending || withdraw.isConfirming}
-            className="bg-green-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-          >
-            {withdraw.isPending ? "Signature..." : withdraw.isConfirming ? "Confirmation..." : "Retirer"}
-          </button>
-        </div>
-        <TransactionStatus
-          isPending={withdraw.isPending}
-          isConfirming={withdraw.isConfirming}
-          isSuccess={withdraw.isSuccess}
-          hash={withdraw.hash}
-          error={withdraw.error}
-        />
+          <TransactionStatus
+            isPending={withdraw.isPending}
+            isConfirming={withdraw.isConfirming}
+            isSuccess={withdraw.isSuccess}
+            hash={withdraw.hash}
+            error={withdraw.error}
+          />
+        </GlassCard>
+
+        {/* Cars list */}
+        {isLoading && <LoadingSkeleton type="list-item" count={3} />}
+
+        {!isLoading && myCars.length === 0 && (
+          <EmptyState
+            icon={<Car className="h-12 w-12" />}
+            title="Aucune annonce"
+            description="Vous n'avez aucune auto listee."
+            actionLabel="Lister une auto"
+            actionTo="/list"
+          />
+        )}
+
+        <motion.div
+          variants={stagger}
+          initial="hidden"
+          animate="show"
+          className="space-y-4"
+        >
+          {myCars.map((car) => (
+            <motion.div key={car.id.toString()} variants={fadeUp}>
+              <CarListingCard car={car} />
+            </motion.div>
+          ))}
+        </motion.div>
       </div>
-
-      {/* Cars list */}
-      {isLoading && <p className="text-gray-500">Chargement...</p>}
-
-      {!isLoading && myCars.length === 0 && (
-        <div className="text-center py-12">
-          <p className="text-gray-500">Vous n'avez aucune auto listee.</p>
-        </div>
-      )}
-
-      <div className="space-y-4">
-        {myCars.map((car) => (
-          <CarListingCard key={car.id.toString()} car={car} />
-        ))}
-      </div>
-    </div>
+    </AnimatedPage>
   );
 }
 
-function CarListingCard({ car }: { car: Car }) {
+function CarListingCard({ car }: { car: CarType }) {
   const update = useUpdateCar();
 
   return (
-    <div className="bg-white rounded-xl shadow-sm border p-5 space-y-3">
+    <GlassCard>
       <div className="flex items-start justify-between">
         <div>
-          <Link to={`/car/${car.id}`} className="font-semibold text-gray-900 hover:text-blue-600">
+          <Link to={`/car/${car.id}`} className="font-semibold text-white hover:text-primary transition-colors">
             {car.brand} {car.model} ({car.year})
           </Link>
-          <p className="text-sm text-gray-500">#{car.id.toString()} &middot; {formatETH(car.dailyPrice)} ETH/jour</p>
+          <p className="text-sm text-slate-500">
+            #{car.id.toString()} &middot; {formatETH(car.dailyPrice)} ETH/jour
+          </p>
         </div>
-        <button
+        <TransactionButton
           onClick={() => update.updateCar(car.id, car.dailyPrice, !car.isActive)}
-          disabled={update.isPending || update.isConfirming}
-          className={`text-xs font-medium px-3 py-1 rounded-full border transition-colors ${
-            car.isActive
-              ? "border-red-200 text-red-600 hover:bg-red-50"
-              : "border-green-200 text-green-600 hover:bg-green-50"
-          }`}
+          isPending={update.isPending}
+          isConfirming={update.isConfirming}
+          variant={car.isActive ? "danger" : "success"}
+          size="sm"
+          icon={<Power className="h-3.5 w-3.5" />}
         >
-          {update.isPending ? "Signature..." : update.isConfirming ? "Confirmation..." : car.isActive ? "Desactiver" : "Activer"}
-        </button>
+          {car.isActive ? "Desactiver" : "Activer"}
+        </TransactionButton>
       </div>
       <TransactionStatus
         isPending={update.isPending}
@@ -111,6 +154,6 @@ function CarListingCard({ car }: { car: Car }) {
         hash={update.hash}
         error={update.error}
       />
-    </div>
+    </GlassCard>
   );
 }

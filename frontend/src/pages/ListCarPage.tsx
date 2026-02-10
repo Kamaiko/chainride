@@ -1,9 +1,15 @@
 import { useState, useCallback } from "react";
 import { parseEther } from "viem";
 import { useAccount } from "wagmi";
+import { PlusCircle, Wallet } from "lucide-react";
 import { useListCar } from "../hooks/useCarRental";
 import { useFormResetOnSuccess } from "../hooks/useFormResetOnSuccess";
 import TransactionStatus from "../components/TransactionStatus";
+import AnimatedPage from "../components/ui/AnimatedPage";
+import PageHeader from "../components/ui/PageHeader";
+import GlassCard from "../components/ui/GlassCard";
+import EmptyState from "../components/ui/EmptyState";
+import TransactionButton from "../components/ui/TransactionButton";
 
 export default function ListCarPage() {
   const { isConnected } = useAccount();
@@ -28,97 +34,108 @@ export default function ListCarPage() {
 
   if (!isConnected) {
     return (
-      <div className="text-center py-16">
-        <p className="text-gray-500 text-lg">Connectez votre portefeuille pour lister une auto.</p>
-      </div>
+      <AnimatedPage>
+        <EmptyState
+          icon={<Wallet className="h-12 w-12" />}
+          title="Portefeuille requis"
+          description="Connectez votre portefeuille pour lister une auto."
+        />
+      </AnimatedPage>
     );
   }
 
   return (
-    <div className="max-w-lg mx-auto">
-      <h1 className="text-3xl font-bold text-gray-900 mb-6">Lister une auto</h1>
+    <AnimatedPage>
+      <div className="max-w-lg mx-auto">
+        <PageHeader icon={<PlusCircle className="h-7 w-7" />} title="Lister une auto" />
 
-      <form onSubmit={handleSubmit} className="bg-white rounded-xl shadow-sm border p-6 space-y-4">
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Marque</label>
-          <input
-            type="text"
-            value={brand}
-            onChange={(e) => setBrand(e.target.value)}
-            placeholder="Toyota"
-            required
-            className="w-full border rounded-lg px-3 py-2 text-sm"
-          />
-        </div>
+        <GlassCard>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium text-slate-300 mb-1">Marque</label>
+              <input
+                type="text"
+                value={brand}
+                onChange={(e) => setBrand(e.target.value)}
+                placeholder="Toyota"
+                required
+                className="w-full"
+              />
+            </div>
 
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Modele</label>
-          <input
-            type="text"
-            value={model}
-            onChange={(e) => setModel(e.target.value)}
-            placeholder="Camry"
-            required
-            className="w-full border rounded-lg px-3 py-2 text-sm"
-          />
-        </div>
+            <div>
+              <label className="block text-sm font-medium text-slate-300 mb-1">Modele</label>
+              <input
+                type="text"
+                value={model}
+                onChange={(e) => setModel(e.target.value)}
+                placeholder="Camry"
+                required
+                className="w-full"
+              />
+            </div>
 
-        <div className="grid grid-cols-2 gap-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Annee</label>
-            <input
-              type="number"
-              value={year}
-              onChange={(e) => setYear(e.target.value)}
-              min="1900"
-              max="2100"
-              required
-              className="w-full border rounded-lg px-3 py-2 text-sm"
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-slate-300 mb-1">Annee</label>
+                <input
+                  type="number"
+                  value={year}
+                  onChange={(e) => setYear(e.target.value)}
+                  min="1900"
+                  max="2100"
+                  required
+                  className="w-full"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-slate-300 mb-1">Prix / jour (ETH)</label>
+                <input
+                  type="number"
+                  value={dailyPrice}
+                  onChange={(e) => setDailyPrice(e.target.value)}
+                  step="0.001"
+                  min="0.001"
+                  required
+                  className="w-full"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-slate-300 mb-1">
+                URI metadonnees (optionnel)
+              </label>
+              <input
+                type="text"
+                value={metadataURI}
+                onChange={(e) => setMetadataURI(e.target.value)}
+                placeholder="ipfs://Qm..."
+                className="w-full"
+              />
+            </div>
+
+            <TransactionButton
+              onClick={() => {}}
+              isPending={isPending}
+              isConfirming={isConfirming}
+              disabled={!brand || !model}
+              icon={<PlusCircle className="h-4 w-4" />}
+              fullWidth
+            >
+              Lister l'auto
+            </TransactionButton>
+
+            <TransactionStatus
+              isPending={isPending}
+              isConfirming={isConfirming}
+              isSuccess={isSuccess}
+              hash={hash}
+              error={error}
             />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Prix / jour (ETH)</label>
-            <input
-              type="number"
-              value={dailyPrice}
-              onChange={(e) => setDailyPrice(e.target.value)}
-              step="0.001"
-              min="0.001"
-              required
-              className="w-full border rounded-lg px-3 py-2 text-sm"
-            />
-          </div>
-        </div>
-
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            URI metadonnees (optionnel)
-          </label>
-          <input
-            type="text"
-            value={metadataURI}
-            onChange={(e) => setMetadataURI(e.target.value)}
-            placeholder="ipfs://Qm..."
-            className="w-full border rounded-lg px-3 py-2 text-sm"
-          />
-        </div>
-
-        <button
-          type="submit"
-          disabled={isPending || isConfirming || !brand || !model}
-          className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-        >
-          {isPending ? "Confirmation..." : isConfirming ? "En cours..." : "Lister l'auto"}
-        </button>
-
-        <TransactionStatus
-          isPending={isPending}
-          isConfirming={isConfirming}
-          isSuccess={isSuccess}
-          hash={hash}
-          error={error}
-        />
-      </form>
-    </div>
+          </form>
+        </GlassCard>
+      </div>
+    </AnimatedPage>
   );
 }

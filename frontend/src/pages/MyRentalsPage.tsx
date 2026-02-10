@@ -1,10 +1,29 @@
 import { useAccount } from "wagmi";
+import { motion } from "framer-motion";
+import { Key, CalendarX, CalendarDays, Coins, RotateCcw, X, Wallet } from "lucide-react";
 import { useReservationCount, useAllReservations, useReturnCar, useCancelReservation, useCar } from "../hooks/useCarRental";
 import { extractResults } from "../lib/contractResults";
 import type { Reservation } from "../types/contracts";
 import { formatETH } from "../lib/format";
 import { fromTimestamp, formatDate } from "../lib/dates";
 import TransactionStatus from "../components/TransactionStatus";
+import AnimatedPage from "../components/ui/AnimatedPage";
+import PageHeader from "../components/ui/PageHeader";
+import GlassCard from "../components/ui/GlassCard";
+import Badge from "../components/ui/Badge";
+import EmptyState from "../components/ui/EmptyState";
+import LoadingSkeleton from "../components/ui/LoadingSkeleton";
+import TransactionButton from "../components/ui/TransactionButton";
+
+const stagger = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.08 } },
+};
+
+const fadeUp = {
+  hidden: { opacity: 0, y: 12 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.3 } },
+};
 
 export default function MyRentalsPage() {
   const { address, isConnected } = useAccount();
@@ -16,30 +35,45 @@ export default function MyRentalsPage() {
 
   if (!isConnected) {
     return (
-      <div className="text-center py-16">
-        <p className="text-gray-500 text-lg">Connectez votre portefeuille pour voir vos locations.</p>
-      </div>
+      <AnimatedPage>
+        <EmptyState
+          icon={<Wallet className="h-12 w-12" />}
+          title="Portefeuille requis"
+          description="Connectez votre portefeuille pour voir vos locations."
+        />
+      </AnimatedPage>
     );
   }
 
   return (
-    <div>
-      <h1 className="text-3xl font-bold text-gray-900 mb-6">Mes locations</h1>
+    <AnimatedPage>
+      <PageHeader icon={<Key className="h-7 w-7" />} title="Mes locations" />
 
-      {isLoading && <p className="text-gray-500">Chargement...</p>}
+      {isLoading && <LoadingSkeleton type="list-item" count={3} />}
 
       {!isLoading && myReservations.length === 0 && (
-        <div className="text-center py-16">
-          <p className="text-gray-500 text-lg">Vous n'avez aucune location.</p>
-        </div>
+        <EmptyState
+          icon={<CalendarX className="h-12 w-12" />}
+          title="Aucune location"
+          description="Vous n'avez aucune location. Parcourez les autos disponibles !"
+          actionLabel="Parcourir"
+          actionTo="/browse"
+        />
       )}
 
-      <div className="space-y-4">
+      <motion.div
+        variants={stagger}
+        initial="hidden"
+        animate="show"
+        className="space-y-4"
+      >
         {myReservations.map((res) => (
-          <ReservationCard key={res.id.toString()} reservation={res} />
+          <motion.div key={res.id.toString()} variants={fadeUp}>
+            <ReservationCard reservation={res} />
+          </motion.div>
         ))}
-      </div>
-    </div>
+      </motion.div>
+    </AnimatedPage>
   );
 }
 
@@ -52,73 +86,86 @@ function ReservationCard({ reservation }: { reservation: Reservation }) {
   const canCancel = reservation.isActive && now < reservation.startDate;
 
   return (
-    <div className="bg-white rounded-xl shadow-sm border p-5 space-y-3">
+    <GlassCard>
       <div className="flex items-start justify-between">
         <div>
-          <h3 className="font-semibold text-gray-900">
+          <h3 className="font-semibold text-white">
             {car ? `${car.brand} ${car.model}` : `Voiture #${reservation.carId}`}
           </h3>
-          <p className="text-sm text-gray-500">Reservation #{reservation.id.toString()}</p>
+          <p className="text-sm text-slate-500">Reservation #{reservation.id.toString()}</p>
         </div>
-        <span
-          className={`text-xs font-medium px-2 py-1 rounded-full ${
-            reservation.isActive ? "bg-blue-100 text-blue-700" : "bg-gray-100 text-gray-500"
-          }`}
-        >
+        <Badge variant={reservation.isActive ? "info" : "neutral"}>
           {reservation.isActive ? "Active" : "Terminee"}
-        </span>
+        </Badge>
       </div>
 
-      <div className="grid grid-cols-3 gap-4 text-sm">
-        <div>
-          <p className="text-gray-500">Debut</p>
-          <p className="font-medium">{formatDate(fromTimestamp(reservation.startDate))}</p>
+      <div className="grid grid-cols-3 gap-4 text-sm mt-3">
+        <div className="flex items-start gap-1.5">
+          <CalendarDays className="h-4 w-4 text-slate-500 mt-0.5" />
+          <div>
+            <p className="text-slate-500">Debut</p>
+            <p className="font-medium text-slate-300">{formatDate(fromTimestamp(reservation.startDate))}</p>
+          </div>
         </div>
-        <div>
-          <p className="text-gray-500">Fin</p>
-          <p className="font-medium">{formatDate(fromTimestamp(reservation.endDate))}</p>
+        <div className="flex items-start gap-1.5">
+          <CalendarDays className="h-4 w-4 text-slate-500 mt-0.5" />
+          <div>
+            <p className="text-slate-500">Fin</p>
+            <p className="font-medium text-slate-300">{formatDate(fromTimestamp(reservation.endDate))}</p>
+          </div>
         </div>
-        <div>
-          <p className="text-gray-500">Prix total</p>
-          <p className="font-medium">{formatETH(reservation.totalPrice)} ETH</p>
+        <div className="flex items-start gap-1.5">
+          <Coins className="h-4 w-4 text-slate-500 mt-0.5" />
+          <div>
+            <p className="text-slate-500">Prix total</p>
+            <p className="font-medium text-slate-300">{formatETH(reservation.totalPrice)} ETH</p>
+          </div>
         </div>
       </div>
 
       {reservation.isActive && (
-        <div className="flex gap-2">
-          <button
+        <div className="flex gap-2 mt-3">
+          <TransactionButton
             onClick={() => returnCar.returnCar(reservation.id)}
-            disabled={returnCar.isPending || returnCar.isConfirming}
-            className="bg-green-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-green-700 disabled:opacity-50 transition-colors"
+            isPending={returnCar.isPending}
+            isConfirming={returnCar.isConfirming}
+            variant="success"
+            size="sm"
+            icon={<RotateCcw className="h-3.5 w-3.5" />}
           >
-            {returnCar.isPending ? "Signature..." : returnCar.isConfirming ? "Confirmation..." : "Retourner"}
-          </button>
+            Retourner
+          </TransactionButton>
           {canCancel && (
-            <button
+            <TransactionButton
               onClick={() => cancelRes.cancelReservation(reservation.id)}
-              disabled={cancelRes.isPending || cancelRes.isConfirming}
-              className="bg-red-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-red-700 disabled:opacity-50 transition-colors"
+              isPending={cancelRes.isPending}
+              isConfirming={cancelRes.isConfirming}
+              variant="danger"
+              size="sm"
+              icon={<X className="h-3.5 w-3.5" />}
             >
-              {cancelRes.isPending ? "Signature..." : cancelRes.isConfirming ? "Confirmation..." : "Annuler"}
-            </button>
+              Annuler
+            </TransactionButton>
           )}
         </div>
       )}
 
-      <TransactionStatus
-        isPending={returnCar.isPending}
-        isConfirming={returnCar.isConfirming}
-        isSuccess={returnCar.isSuccess}
-        hash={returnCar.hash}
-        error={returnCar.error}
-      />
-      <TransactionStatus
-        isPending={cancelRes.isPending}
-        isConfirming={cancelRes.isConfirming}
-        isSuccess={cancelRes.isSuccess}
-        hash={cancelRes.hash}
-        error={cancelRes.error}
-      />
-    </div>
+      <div className="mt-3 space-y-2">
+        <TransactionStatus
+          isPending={returnCar.isPending}
+          isConfirming={returnCar.isConfirming}
+          isSuccess={returnCar.isSuccess}
+          hash={returnCar.hash}
+          error={returnCar.error}
+        />
+        <TransactionStatus
+          isPending={cancelRes.isPending}
+          isConfirming={cancelRes.isConfirming}
+          isSuccess={cancelRes.isSuccess}
+          hash={cancelRes.hash}
+          error={cancelRes.error}
+        />
+      </div>
+    </GlassCard>
   );
 }

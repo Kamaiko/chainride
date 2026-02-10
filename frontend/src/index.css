@@ -1,6 +1,113 @@
 @import "tailwindcss";
 @import "@rainbow-me/rainbowkit/styles.css";
 
+/* ── Design tokens ── */
+@theme {
+  --color-primary: #3b82f6;
+  --color-accent: #8b5cf6;
+  --color-surface: #0f0f1a;
+  --color-surface-light: #1a1a2e;
+  --color-glass: rgba(255, 255, 255, 0.05);
+  --color-glass-border: rgba(255, 255, 255, 0.08);
+  --color-glass-hover: rgba(255, 255, 255, 0.1);
+  --color-success: #22c55e;
+  --color-error: #ef4444;
+  --color-warning: #f59e0b;
+}
+
+/* ── Glass utility ── */
+@utility glass {
+  background: var(--color-glass);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--color-glass-border);
+  border-radius: 1rem;
+}
+
+@utility glass-subtle {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 0.75rem;
+}
+
+/* ── Gradient text ── */
+@utility gradient-text {
+  background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* ── Gradient button ── */
+@utility gradient-btn {
+  background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+  color: white;
+  font-weight: 600;
+  border-radius: 0.75rem;
+  transition: all 0.2s ease;
+  &:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+  }
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+  }
+}
+
+/* ── Base styles ── */
 body {
-  @apply bg-gray-50 text-gray-900 antialiased;
+  background-color: var(--color-surface);
+  color: #e2e8f0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#root {
+  min-height: 100vh;
+  position: relative;
+  background:
+    radial-gradient(ellipse 80% 60% at 80% 10%, rgba(59, 130, 246, 0.08), transparent),
+    radial-gradient(ellipse 60% 50% at 20% 90%, rgba(139, 92, 246, 0.06), transparent);
+}
+
+/* ── Form inputs (dark) ── */
+input[type="text"],
+input[type="number"],
+input[type="date"],
+select,
+textarea {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 0.75rem;
+  color: #e2e8f0;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  &:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+  }
+  &::placeholder {
+    color: rgba(255, 255, 255, 0.3);
+  }
+}
+
+/* Date picker dark mode fix */
+input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(0.8);
+}
+
+/* ── Scrollbar ── */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
 }

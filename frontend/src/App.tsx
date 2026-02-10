@@ -1,5 +1,6 @@
 import { lazy, Suspense } from "react";
 import { Routes, Route } from "react-router-dom";
+import { Loader2 } from "lucide-react";
 import Navbar from "./components/Navbar";
 import NetworkGuard from "./components/NetworkGuard";
 
@@ -16,7 +17,13 @@ function App() {
       <Navbar />
       <NetworkGuard />
       <main className="flex-1 max-w-7xl mx-auto w-full px-4 py-8">
-        <Suspense fallback={<div className="text-center py-16 text-gray-500">Chargement...</div>}>
+        <Suspense
+          fallback={
+            <div className="flex items-center justify-center py-16">
+              <Loader2 className="h-8 w-8 animate-spin text-primary" />
+            </div>
+          }
+        >
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/browse" element={<BrowseCarsPage />} />
@@ -27,7 +34,7 @@ function App() {
           </Routes>
         </Suspense>
       </main>
-      <footer className="text-center text-sm text-gray-500 py-4 border-t">
+      <footer className="text-center text-sm text-slate-600 py-4 border-t border-white/5">
         ChainRide &mdash; Location d'autos decentralisee &mdash; IFT-4100/7100
       </footer>
     </div>

@@ -1,5 +1,6 @@
 import { useAccount, useChainId, useSwitchChain } from "wagmi";
 import { sepolia, hardhat } from "wagmi/chains";
+import { AlertTriangle } from "lucide-react";
 
 const SUPPORTED_CHAIN_IDS = [sepolia.id, hardhat.id];
 
@@ -12,14 +13,17 @@ export default function NetworkGuard() {
   if (SUPPORTED_CHAIN_IDS.includes(chainId as typeof SUPPORTED_CHAIN_IDS[number])) return null;
 
   return (
-    <div className="bg-amber-50 border-b border-amber-200 px-4 py-3">
+    <div className="bg-amber-500/10 border-b border-amber-500/20 px-4 py-3">
       <div className="max-w-7xl mx-auto flex items-center justify-between">
-        <p className="text-amber-800 text-sm font-medium">
-          Reseau non supporte. Veuillez basculer vers Sepolia ou Hardhat local.
-        </p>
+        <div className="flex items-center gap-2">
+          <AlertTriangle className="h-4 w-4 text-amber-400" />
+          <p className="text-amber-300 text-sm font-medium">
+            Reseau non supporte. Veuillez basculer vers Sepolia ou Hardhat local.
+          </p>
+        </div>
         <button
           onClick={() => switchChain({ chainId: sepolia.id })}
-          className="bg-amber-600 text-white text-sm px-4 py-1.5 rounded-md hover:bg-amber-700 transition-colors"
+          className="bg-amber-500/20 text-amber-300 text-sm px-4 py-1.5 rounded-lg border border-amber-500/30 hover:bg-amber-500/30 transition-colors"
         >
           Basculer vers Sepolia
         </button>
