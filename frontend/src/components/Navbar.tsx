@@ -1,11 +1,10 @@
 import { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation } from "@tanstack/react-router";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { useAccount } from "wagmi";
 import { useTranslation } from "react-i18next";
 import { AnimatePresence, motion } from "framer-motion";
 import { Car, Search, PlusCircle, Key, LayoutList, Menu, X, Globe } from "lucide-react";
-import { cn } from "../lib/cn";
 
 const NAV_ICONS = [Search, PlusCircle, Key, LayoutList] as const;
 const NAV_ROUTES = ["/browse", "/list", "/my-rentals", "/my-listings"] as const;
@@ -15,20 +14,17 @@ function NavLink({
   to,
   label,
   icon: Icon,
-  isActive,
 }: {
   to: string;
   label: string;
   icon: typeof Search;
-  isActive: boolean;
 }) {
   return (
     <Link
       to={to}
-      className={cn(
-        "flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-colors",
-        isActive ? "bg-white/10 text-white" : "text-slate-400 hover:text-white hover:bg-white/5",
-      )}
+      className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-colors"
+      activeProps={{ className: "bg-white/10 text-white" }}
+      inactiveProps={{ className: "text-slate-400 hover:text-white hover:bg-white/5" }}
     >
       <Icon className="h-4 w-4" />
       {label}
@@ -70,7 +66,7 @@ export default function Navbar() {
         {isConnected && (
           <div className="hidden md:flex items-center gap-1">
             {navLinks.map((link) => (
-              <NavLink key={link.to} {...link} isActive={pathname === link.to} />
+              <NavLink key={link.to} {...link} />
             ))}
           </div>
         )}
@@ -106,7 +102,7 @@ export default function Navbar() {
           >
             <div className="px-4 py-3 space-y-1">
               {navLinks.map((link) => (
-                <NavLink key={link.to} {...link} isActive={pathname === link.to} />
+                <NavLink key={link.to} {...link} />
               ))}
             </div>
           </motion.div>

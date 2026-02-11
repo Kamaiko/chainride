@@ -1,3 +1,4 @@
+import { createFileRoute } from "@tanstack/react-router";
 import { useState, useCallback } from "react";
 import { parseEther } from "viem";
 import { useAccount } from "wagmi";
@@ -12,7 +13,11 @@ import GlassCard from "../components/ui/GlassCard";
 import EmptyState from "../components/ui/EmptyState";
 import TransactionButton from "../components/ui/TransactionButton";
 
-export default function ListCarPage() {
+export const Route = createFileRoute("/list")({
+  component: ListCarPage,
+});
+
+function ListCarPage() {
   const { isConnected } = useAccount();
   const { t } = useTranslation();
   const [brand, setBrand] = useState("");

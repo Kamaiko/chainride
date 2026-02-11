@@ -1,5 +1,5 @@
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useAccount } from "wagmi";
-import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
 import { LayoutList, Car, Wallet, ArrowDownToLine, Power, Plus } from "lucide-react";
@@ -22,7 +22,11 @@ import LoadingSkeleton from "../components/ui/LoadingSkeleton";
 import TransactionButton from "../components/ui/TransactionButton";
 import { stagger, fadeUp } from "../lib/animations";
 
-export default function MyListingsPage() {
+export const Route = createFileRoute("/my-listings")({
+  component: MyListingsPage,
+});
+
+function MyListingsPage() {
   const { address, isConnected } = useAccount();
   const { t } = useTranslation();
   const { data: carCount } = useCarCount();
@@ -126,7 +130,8 @@ function CarListingCard({ car }: { car: CarType }) {
       <div className="flex items-start justify-between">
         <div>
           <Link
-            to={`/car/${car.id}`}
+            to="/car/$carId"
+            params={{ carId: car.id.toString() }}
             className="font-semibold text-white hover:text-primary transition-colors"
           >
             {car.brand} {car.model} ({car.year})

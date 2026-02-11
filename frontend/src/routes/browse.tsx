@@ -1,3 +1,4 @@
+import { createFileRoute } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import { Search, SearchX } from "lucide-react";
 import { useTranslation } from "react-i18next";
@@ -11,7 +12,11 @@ import PageHeader from "../components/ui/PageHeader";
 import LoadingSkeleton from "../components/ui/LoadingSkeleton";
 import EmptyState from "../components/ui/EmptyState";
 
-export default function BrowseCarsPage() {
+export const Route = createFileRoute("/browse")({
+  component: BrowseCarsPage,
+});
+
+function BrowseCarsPage() {
   const { t } = useTranslation();
   const { data: carCount, isLoading: countLoading } = useCarCount();
   const { data: carsResult, isLoading: carsLoading } = useAllCars(carCount);

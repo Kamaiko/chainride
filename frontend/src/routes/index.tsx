@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useAccount } from "wagmi";
 import { useTranslation } from "react-i18next";
 import { motion } from "framer-motion";
@@ -16,7 +16,11 @@ import { useCarCount, useReservationCount, useVersion } from "../hooks/useCarRen
 import { staggerSlow, fadeUpSlow } from "../lib/animations";
 import AnimatedPage from "../components/ui/AnimatedPage";
 
-export default function HomePage() {
+export const Route = createFileRoute("/")({
+  component: HomePage,
+});
+
+function HomePage() {
   const { isConnected } = useAccount();
   const { t } = useTranslation();
   const { data: carCount } = useCarCount();

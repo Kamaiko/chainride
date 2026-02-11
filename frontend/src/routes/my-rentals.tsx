@@ -1,3 +1,4 @@
+import { createFileRoute } from "@tanstack/react-router";
 import { useAccount } from "wagmi";
 import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
@@ -23,7 +24,11 @@ import LoadingSkeleton from "../components/ui/LoadingSkeleton";
 import TransactionButton from "../components/ui/TransactionButton";
 import { stagger, fadeUp } from "../lib/animations";
 
-export default function MyRentalsPage() {
+export const Route = createFileRoute("/my-rentals")({
+  component: MyRentalsPage,
+});
+
+function MyRentalsPage() {
   const { address, isConnected } = useAccount();
   const { t } = useTranslation();
   const { data: resCount } = useReservationCount();

@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link } from "@tanstack/react-router";
 import { Calendar, User } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { formatETH, shortenAddress } from "../lib/format";
@@ -20,7 +20,7 @@ export default function CarCard({
   const { t } = useTranslation();
 
   return (
-    <Link to={`/car/${id}`} className="block">
+    <Link to="/car/$carId" params={{ carId: id.toString() }} className="block">
       <GlassCard hover>
         <div className="flex items-start justify-between mb-3">
           <div>

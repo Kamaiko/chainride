@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { createFileRoute } from "@tanstack/react-router";
 import { useAccount } from "wagmi";
 import { useState, useCallback } from "react";
 import { useTranslation } from "react-i18next";
@@ -21,8 +21,12 @@ import LoadingSkeleton from "../components/ui/LoadingSkeleton";
 import EmptyState from "../components/ui/EmptyState";
 import TransactionButton from "../components/ui/TransactionButton";
 
-export default function CarDetailPage() {
-  const { carId } = useParams<{ carId: string }>();
+export const Route = createFileRoute("/car/$carId")({
+  component: CarDetailPage,
+});
+
+function CarDetailPage() {
+  const { carId } = Route.useParams();
   const id = BigInt(carId ?? "0");
   const { address } = useAccount();
   const { t } = useTranslation();
