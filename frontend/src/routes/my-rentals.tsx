@@ -31,8 +31,9 @@ export const Route = createFileRoute("/my-rentals")({
 function MyRentalsPage() {
   const { address, isConnected } = useAccount();
   const { t } = useTranslation();
-  const { data: resCount } = useReservationCount();
-  const { data: resResults, isLoading } = useAllReservations(resCount);
+  const { data: resCount, isLoading: countLoading } = useReservationCount();
+  const { data: resResults, isLoading: resLoading } = useAllReservations(resCount);
+  const isLoading = countLoading || resLoading;
 
   const myReservations = extractResults<Reservation>(resResults).filter(
     (r) => r.renter.toLowerCase() === address?.toLowerCase(),
@@ -66,13 +67,15 @@ function MyRentalsPage() {
         />
       )}
 
-      <motion.div variants={stagger} initial="hidden" animate="show" className="space-y-4">
-        {myReservations.map((res) => (
-          <motion.div key={res.id.toString()} variants={fadeUp}>
-            <ReservationCard reservation={res} />
-          </motion.div>
-        ))}
-      </motion.div>
+      {myReservations.length > 0 && (
+        <motion.div variants={stagger} initial="hidden" animate="show" className="space-y-4">
+          {myReservations.map((res) => (
+            <motion.div key={res.id.toString()} variants={fadeUp}>
+              <ReservationCard reservation={res} />
+            </motion.div>
+          ))}
+        </motion.div>
+      )}
     </AnimatedPage>
   );
 }

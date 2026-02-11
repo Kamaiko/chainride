@@ -29,8 +29,9 @@ export const Route = createFileRoute("/my-listings")({
 function MyListingsPage() {
   const { address, isConnected } = useAccount();
   const { t } = useTranslation();
-  const { data: carCount } = useCarCount();
-  const { data: carsResult, isLoading } = useAllCars(carCount);
+  const { data: carCount, isLoading: countLoading } = useCarCount();
+  const { data: carsResult, isLoading: carsLoading } = useAllCars(carCount);
+  const isLoading = countLoading || carsLoading;
   const { data: earnings } = useOwnerEarnings(address);
   const withdraw = useWithdrawEarnings();
 
@@ -109,13 +110,15 @@ function MyListingsPage() {
           />
         )}
 
-        <motion.div variants={stagger} initial="hidden" animate="show" className="space-y-4">
-          {myCars.map((car) => (
-            <motion.div key={car.id.toString()} variants={fadeUp}>
-              <CarListingCard car={car} />
-            </motion.div>
-          ))}
-        </motion.div>
+        {myCars.length > 0 && (
+          <motion.div variants={stagger} initial="hidden" animate="show" className="space-y-4">
+            {myCars.map((car) => (
+              <motion.div key={car.id.toString()} variants={fadeUp}>
+                <CarListingCard car={car} />
+              </motion.div>
+            ))}
+          </motion.div>
+        )}
       </div>
     </AnimatedPage>
   );
