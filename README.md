@@ -1,78 +1,34 @@
-# ChainRide - Location d'autos decentralisee
+# ChainRide
 
-**Cours** : IFT-4100/7100 — Concepts et applications de la chaine de blocs, Universite Laval
-**Theme** : Location d'autos (option 3)
-**Reseau** : Sepolia (Ethereum testnet)
+Projet realise dans le cadre du cours IFT-4100 Concepts et applications de la chaine de blocs. ChainRide est une application decentralisee de location de voitures pair-a-pair sur Ethereum. Les proprietaires listent leurs vehicules avec un prix par jour, les locataires reservent et paient directement en ETH — sans intermediaire.
 
-## Stack
+## Demarrage
 
-- **Contrats** : Solidity 0.8.24, Hardhat, OpenZeppelin Upgradeable (UUPS)
-- **Frontend** : React + TypeScript + Vite, wagmi + viem, RainbowKit, Tailwind CSS v4
-
-## Installation
+1. Installer les dependances :
 
 ```bash
-npm install
-cd frontend && npm install && cd ..
+npm install                # racine (Hardhat)
+cd frontend && npm install # frontend (React)
 ```
 
-Copier `.env.example` vers `.env` et remplir les variables (cle privee, RPC URL).
-Copier `frontend/.env.example` vers `frontend/.env` et remplir l'adresse du proxy.
+2. Copier `.env.example` → `.env` dans chaque racine et remplir les valeurs.
+   L'adresse du contrat proxy UUPS sur Sepolia :
+   [`0x2BCA7b901cEc9049EBCF2695Be33735BeDc7f748`](https://sepolia.etherscan.io/address/0x2BCA7b901cEc9049EBCF2695Be33735BeDc7f748)
+   → a mettre dans `frontend/.env` sous `VITE_CONTRACT_ADDRESS`
 
-## Compiler et tester
+3. Lancer :
 
 ```bash
-npx hardhat compile
-npx hardhat test          # 11 tests (10 V1 + 1 upgrade V1->V2)
+npx hardhat test           # tests
+cd frontend && npm run dev # frontend (localhost:5173)
 ```
 
-## Deployer sur Sepolia
+## Contrat
 
-```bash
-# V1
-npx hardhat run scripts/deploy.ts --network sepolia
+**V1** — Listing de voitures, location avec detection de chevauchement, restitution/annulation avec remboursement, retrait des gains.
 
-# V2 (upgrade)
-PROXY_ADDRESS=0x... npx hardhat run scripts/upgrade.ts --network sepolia
-```
+**V2** — Depot de garantie configurable, penalite de retard (deduite du depot), frais de plateforme par location.
 
-## Lancer le frontend
+## Frontend
 
-```bash
-cd frontend
-npm run dev               # http://localhost:5173
-```
-
-## Adresses deployees (Sepolia)
-
-| Contrat | Adresse | Etherscan |
-|---------|---------|-----------|
-| Proxy (V2) | `0x2BCA7b901cEc9049EBCF2695Be33735BeDc7f748` | [Voir](https://sepolia.etherscan.io/address/0x2BCA7b901cEc9049EBCF2695Be33735BeDc7f748) |
-| Implementation V1 | `0xA6a0D9E26f3431b9E2Fcdd961C26EF2cB119B346` | [Voir](https://sepolia.etherscan.io/address/0xA6a0D9E26f3431b9E2Fcdd961C26EF2cB119B346) |
-
-## Fonctionnalites
-
-### V1 — Contrat de base
-- Lister une voiture (marque, modele, annee, prix journalier)
-- Louer avec paiement en ETH et detection de chevauchement
-- Retourner une voiture / annuler avant le debut
-- Retrait des gains par le proprietaire (pull-over-push)
-
-### V2 — Upgrade
-- Depot de garantie configurable par voiture
-- Penalite de retard (deduction automatique sur le depot)
-- Frais de plateforme (pourcentage sur chaque location)
-- `getVersion()` retourne `"2.0.0"`
-
-### Securite
-- `ReentrancyGuardUpgradeable`, `OwnableUpgradeable`
-- Pattern Checks-Effects-Interactions, custom errors
-- Storage gap pour compatibilite future
-
-## Video de demonstration
-
-La video montre :
-1. Connexion MetaMask et affichage de l'adresse
-2. Transaction complete : lister → louer → retourner → retirer les gains
-3. Preuve de deploiement : adresse proxy sur Etherscan
-4. Preuve d'upgrade : `getVersion()` = `"2.0.0"`
+React 19 + TypeScript + Vite, wagmi/viem pour les interactions on-chain, RainbowKit pour la connexion wallet, Tailwind CSS v4, Framer Motion.
