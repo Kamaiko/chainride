@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { useAccount } from "wagmi";
+import { useTranslation } from "react-i18next";
 import { motion } from "framer-motion";
 import {
   ArrowRight,
@@ -17,6 +18,7 @@ import AnimatedPage from "../components/ui/AnimatedPage";
 
 export default function HomePage() {
   const { isConnected } = useAccount();
+  const { t } = useTranslation();
   const { data: carCount } = useCarCount();
   const { data: reservationCount } = useReservationCount();
   const { data: version } = useVersion();
@@ -41,8 +43,7 @@ export default function HomePage() {
             transition={{ delay: 0.2, duration: 0.5 }}
             className="text-xl text-slate-400 mb-8 max-w-2xl mx-auto"
           >
-            Location de voitures decentralisee sur Ethereum. Listez votre auto, louez en toute
-            transparence, sans intermediaire.
+            {t("home.hero.subtitle")}
           </motion.p>
           <motion.div
             initial={{ opacity: 0, y: 10 }}
@@ -51,7 +52,7 @@ export default function HomePage() {
             className="flex justify-center gap-4"
           >
             <Link to="/browse" className="gradient-btn px-6 py-3 flex items-center gap-2">
-              Parcourir les autos
+              {t("home.hero.browse")}
               <ArrowRight className="h-4 w-4" />
             </Link>
             {isConnected && (
@@ -60,7 +61,7 @@ export default function HomePage() {
                 className="glass px-6 py-3 font-semibold text-slate-200 hover:bg-white/10 transition-colors flex items-center gap-2"
               >
                 <Plus className="h-4 w-4" />
-                Lister une auto
+                {t("home.hero.list")}
               </Link>
             )}
           </motion.div>
@@ -81,9 +82,9 @@ export default function HomePage() {
                   <ArrowLeftRight className="h-5 w-5 text-accent" />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-white mb-1">Pair-a-pair</h3>
+                  <h3 className="font-semibold text-white mb-1">{t("home.feature.p2p.title")}</h3>
                   <p className="text-slate-400 text-sm leading-relaxed">
-                    Paiements directs au proprietaire via smart contract. Aucun tiers.
+                    {t("home.feature.p2p.desc")}
                   </p>
                 </div>
               </motion.div>
@@ -96,9 +97,9 @@ export default function HomePage() {
                   <Eye className="h-5 w-5 text-accent" />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-white mb-1">Tracable</h3>
+                  <h3 className="font-semibold text-white mb-1">{t("home.feature.traceable.title")}</h3>
                   <p className="text-slate-400 text-sm leading-relaxed">
-                    Transactions verifiables sur la blockchain Ethereum (Sepolia).
+                    {t("home.feature.traceable.desc")}
                   </p>
                 </div>
               </motion.div>
@@ -111,9 +112,9 @@ export default function HomePage() {
                   <ShieldCheck className="h-5 w-5 text-accent" />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-white mb-1">Securise</h3>
+                  <h3 className="font-semibold text-white mb-1">{t("home.feature.secure.title")}</h3>
                   <p className="text-slate-400 text-sm leading-relaxed">
-                    Depot de garantie, protection reentrance et controle OpenZeppelin.
+                    {t("home.feature.secure.desc")}
                   </p>
                 </div>
               </motion.div>
@@ -136,7 +137,7 @@ export default function HomePage() {
                   <p className="text-2xl font-bold text-white">
                     {carCount?.toString() ?? "..."}
                   </p>
-                  <p className="text-slate-500 text-xs">Voitures listees</p>
+                  <p className="text-slate-500 text-xs">{t("home.stats.cars")}</p>
                 </div>
               </motion.div>
 
@@ -146,7 +147,7 @@ export default function HomePage() {
                   <p className="text-2xl font-bold text-white">
                     {reservationCount?.toString() ?? "..."}
                   </p>
-                  <p className="text-slate-500 text-xs">Reservations</p>
+                  <p className="text-slate-500 text-xs">{t("home.stats.reservations")}</p>
                 </div>
               </motion.div>
 
@@ -154,7 +155,7 @@ export default function HomePage() {
                 <FileCode className="h-4 w-4 text-primary" />
                 <div>
                   <p className="text-2xl font-bold text-white">{version ?? "..."}</p>
-                  <p className="text-slate-500 text-xs">Version du contrat</p>
+                  <p className="text-slate-500 text-xs">{t("home.stats.version")}</p>
                 </div>
               </motion.div>
             </div>

@@ -1,5 +1,6 @@
 import { useAccount } from "wagmi";
 import { motion } from "framer-motion";
+import { useTranslation } from "react-i18next";
 import { Key, CalendarX, CalendarDays, Coins, RotateCcw, X, Wallet } from "lucide-react";
 import {
   useReservationCount,
@@ -24,6 +25,7 @@ import { stagger, fadeUp } from "../lib/animations";
 
 export default function MyRentalsPage() {
   const { address, isConnected } = useAccount();
+  const { t } = useTranslation();
   const { data: resCount } = useReservationCount();
   const { data: resResults, isLoading } = useAllReservations(resCount);
 
@@ -36,8 +38,8 @@ export default function MyRentalsPage() {
       <AnimatedPage>
         <EmptyState
           icon={<Wallet className="h-12 w-12" />}
-          title="Portefeuille requis"
-          description="Connectez votre portefeuille pour voir vos locations."
+          title={t("rentals.wallet.title")}
+          description={t("rentals.wallet.desc")}
         />
       </AnimatedPage>
     );
@@ -45,16 +47,16 @@ export default function MyRentalsPage() {
 
   return (
     <AnimatedPage>
-      <PageHeader icon={<Key className="h-7 w-7" />} title="Mes locations" />
+      <PageHeader icon={<Key className="h-7 w-7" />} title={t("rentals.title")} />
 
       {isLoading && <LoadingSkeleton type="list-item" count={3} />}
 
       {!isLoading && myReservations.length === 0 && (
         <EmptyState
           icon={<CalendarX className="h-12 w-12" />}
-          title="Aucune location"
-          description="Vous n'avez aucune location. Parcourez les autos disponibles !"
-          actionLabel="Parcourir"
+          title={t("rentals.empty.title")}
+          description={t("rentals.empty.desc")}
+          actionLabel={t("rentals.empty.action")}
           actionTo="/browse"
         />
       )}
@@ -71,6 +73,7 @@ export default function MyRentalsPage() {
 }
 
 function ReservationCard({ reservation }: { reservation: Reservation }) {
+  const { t } = useTranslation();
   const { data: car } = useCar(reservation.carId);
   const returnCar = useReturnCar();
   const cancelRes = useCancelReservation();
@@ -83,12 +86,12 @@ function ReservationCard({ reservation }: { reservation: Reservation }) {
       <div className="flex items-start justify-between">
         <div>
           <h3 className="font-semibold text-white">
-            {car ? `${car.brand} ${car.model}` : `Voiture #${reservation.carId}`}
+            {car ? `${car.brand} ${car.model}` : t("rentals.carFallback", { id: reservation.carId.toString() })}
           </h3>
-          <p className="text-sm text-slate-500">Reservation #{reservation.id.toString()}</p>
+          <p className="text-sm text-slate-500">{t("rentals.reservation", { id: reservation.id.toString() })}</p>
         </div>
         <Badge variant={reservation.isActive ? "info" : "neutral"}>
-          {reservation.isActive ? "Active" : "Terminee"}
+          {reservation.isActive ? t("rentals.active") : t("rentals.ended")}
         </Badge>
       </div>
 
@@ -96,7 +99,7 @@ function ReservationCard({ reservation }: { reservation: Reservation }) {
         <div className="flex items-start gap-1.5">
           <CalendarDays className="h-4 w-4 text-slate-500 mt-0.5" />
           <div>
-            <p className="text-slate-500">Debut</p>
+            <p className="text-slate-500">{t("rentals.start")}</p>
             <p className="font-medium text-slate-300">
               {formatDate(fromTimestamp(reservation.startDate))}
             </p>
@@ -105,7 +108,7 @@ function ReservationCard({ reservation }: { reservation: Reservation }) {
         <div className="flex items-start gap-1.5">
           <CalendarDays className="h-4 w-4 text-slate-500 mt-0.5" />
           <div>
-            <p className="text-slate-500">Fin</p>
+            <p className="text-slate-500">{t("rentals.end")}</p>
             <p className="font-medium text-slate-300">
               {formatDate(fromTimestamp(reservation.endDate))}
             </p>
@@ -114,7 +117,7 @@ function ReservationCard({ reservation }: { reservation: Reservation }) {
         <div className="flex items-start gap-1.5">
           <Coins className="h-4 w-4 text-slate-500 mt-0.5" />
           <div>
-            <p className="text-slate-500">Prix total</p>
+            <p className="text-slate-500">{t("rentals.totalPrice")}</p>
             <p className="font-medium text-slate-300">{formatETH(reservation.totalPrice)} ETH</p>
           </div>
         </div>
@@ -130,7 +133,7 @@ function ReservationCard({ reservation }: { reservation: Reservation }) {
             size="sm"
             icon={<RotateCcw className="h-3.5 w-3.5" />}
           >
-            Retourner
+            {t("rentals.return")}
           </TransactionButton>
           {canCancel && (
             <TransactionButton
@@ -141,7 +144,7 @@ function ReservationCard({ reservation }: { reservation: Reservation }) {
               size="sm"
               icon={<X className="h-3.5 w-3.5" />}
             >
-              Annuler
+              {t("rentals.cancel")}
             </TransactionButton>
           )}
         </div>

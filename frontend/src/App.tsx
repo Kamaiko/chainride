@@ -1,5 +1,6 @@
 import { lazy, Suspense } from "react";
 import { Routes, Route } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { Loader2 } from "lucide-react";
 import Navbar from "./components/Navbar";
 import NetworkGuard from "./components/NetworkGuard";
@@ -12,6 +13,8 @@ const MyRentalsPage = lazy(() => import("./pages/MyRentalsPage"));
 const MyListingsPage = lazy(() => import("./pages/MyListingsPage"));
 
 function App() {
+  const { t } = useTranslation();
+
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
@@ -35,7 +38,7 @@ function App() {
         </Suspense>
       </main>
       <footer className="text-center text-sm text-slate-600 py-4 border-t border-white/5">
-        ChainRide &mdash; R&eacute;alis&eacute; par Patrick Patenaude
+        ChainRide &mdash; {t("footer.credit")}
       </footer>
     </div>
   );

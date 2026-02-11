@@ -1,5 +1,6 @@
 import { Loader2 } from "lucide-react";
 import type { ReactNode } from "react";
+import { useTranslation } from "react-i18next";
 import { cn } from "../../lib/cn";
 
 type ButtonVariant = "primary" | "success" | "danger";
@@ -38,11 +39,12 @@ export default function TransactionButton({
   variant = "primary",
   size = "md",
   icon,
-  pendingText = "Signature...",
-  confirmingText = "Confirmation...",
+  pendingText,
+  confirmingText,
   children,
   fullWidth,
 }: TransactionButtonProps) {
+  const { t } = useTranslation();
   const isLoading = isPending || isConfirming;
 
   return (
@@ -59,7 +61,7 @@ export default function TransactionButton({
       {isLoading ? (
         <>
           <Loader2 className="h-4 w-4 animate-spin" />
-          {isPending ? pendingText : confirmingText}
+          {isPending ? (pendingText ?? t("tx.btn.pending")) : (confirmingText ?? t("tx.btn.confirming"))}
         </>
       ) : (
         <>

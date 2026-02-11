@@ -1,6 +1,7 @@
 import { useAccount } from "wagmi";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
+import { useTranslation } from "react-i18next";
 import { LayoutList, Car, Wallet, ArrowDownToLine, Power, Plus } from "lucide-react";
 import {
   useCarCount,
@@ -23,6 +24,7 @@ import { stagger, fadeUp } from "../lib/animations";
 
 export default function MyListingsPage() {
   const { address, isConnected } = useAccount();
+  const { t } = useTranslation();
   const { data: carCount } = useCarCount();
   const { data: carsResult, isLoading } = useAllCars(carCount);
   const { data: earnings } = useOwnerEarnings(address);
@@ -37,8 +39,8 @@ export default function MyListingsPage() {
       <AnimatedPage>
         <EmptyState
           icon={<Wallet className="h-12 w-12" />}
-          title="Portefeuille requis"
-          description="Connectez votre portefeuille pour voir vos annonces."
+          title={t("listings.wallet.title")}
+          description={t("listings.wallet.desc")}
         />
       </AnimatedPage>
     );
@@ -48,11 +50,11 @@ export default function MyListingsPage() {
     <AnimatedPage>
       <PageHeader
         icon={<LayoutList className="h-7 w-7" />}
-        title="Mes annonces"
+        title={t("listings.title")}
         action={
           <Link to="/list" className="gradient-btn px-4 py-2 text-sm flex items-center gap-1.5">
             <Plus className="h-4 w-4" />
-            Nouvelle annonce
+            {t("listings.newListing")}
           </Link>
         }
       />
@@ -64,7 +66,7 @@ export default function MyListingsPage() {
             <div className="flex items-center gap-3">
               <Wallet className="h-5 w-5 text-primary" />
               <div>
-                <p className="text-sm text-slate-500">Gains disponibles</p>
+                <p className="text-sm text-slate-500">{t("listings.earnings")}</p>
                 <p className="text-2xl font-bold gradient-text">
                   {earnings !== undefined ? formatETH(earnings) : "..."} ETH
                 </p>
@@ -78,7 +80,7 @@ export default function MyListingsPage() {
               variant="success"
               icon={<ArrowDownToLine className="h-4 w-4" />}
             >
-              Retirer
+              {t("listings.withdraw")}
             </TransactionButton>
           </div>
           <TransactionStatus
@@ -96,9 +98,9 @@ export default function MyListingsPage() {
         {!isLoading && myCars.length === 0 && (
           <EmptyState
             icon={<Car className="h-12 w-12" />}
-            title="Aucune annonce"
-            description="Vous n'avez aucune auto listee."
-            actionLabel="Lister une auto"
+            title={t("listings.empty.title")}
+            description={t("listings.empty.desc")}
+            actionLabel={t("listings.empty.action")}
             actionTo="/list"
           />
         )}
@@ -116,6 +118,7 @@ export default function MyListingsPage() {
 }
 
 function CarListingCard({ car }: { car: CarType }) {
+  const { t } = useTranslation();
   const update = useUpdateCar();
 
   return (
@@ -129,7 +132,7 @@ function CarListingCard({ car }: { car: CarType }) {
             {car.brand} {car.model} ({car.year})
           </Link>
           <p className="text-sm text-slate-500">
-            #{car.id.toString()} &middot; {formatETH(car.dailyPrice)} ETH/jour
+            #{car.id.toString()} &middot; {formatETH(car.dailyPrice)} {t("listings.perDay")}
           </p>
         </div>
         <TransactionButton
@@ -140,7 +143,7 @@ function CarListingCard({ car }: { car: CarType }) {
           size="sm"
           icon={<Power className="h-3.5 w-3.5" />}
         >
-          {car.isActive ? "Desactiver" : "Activer"}
+          {car.isActive ? t("listings.deactivate") : t("listings.activate")}
         </TransactionButton>
       </div>
       <TransactionStatus

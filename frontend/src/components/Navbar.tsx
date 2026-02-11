@@ -2,16 +2,14 @@ import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { useAccount } from "wagmi";
+import { useTranslation } from "react-i18next";
 import { AnimatePresence, motion } from "framer-motion";
-import { Car, Search, PlusCircle, Key, LayoutList, Menu, X } from "lucide-react";
+import { Car, Search, PlusCircle, Key, LayoutList, Menu, X, Globe } from "lucide-react";
 import { cn } from "../lib/cn";
 
-const NAV_LINKS = [
-  { to: "/browse", label: "Parcourir", icon: Search },
-  { to: "/list", label: "Lister", icon: PlusCircle },
-  { to: "/my-rentals", label: "Locations", icon: Key },
-  { to: "/my-listings", label: "Annonces", icon: LayoutList },
-];
+const NAV_ICONS = [Search, PlusCircle, Key, LayoutList] as const;
+const NAV_ROUTES = ["/browse", "/list", "/my-rentals", "/my-listings"] as const;
+const NAV_KEYS = ["nav.browse", "nav.list", "nav.rentals", "nav.listings"] as const;
 
 function NavLink({
   to,
@@ -41,6 +39,7 @@ function NavLink({
 export default function Navbar() {
   const { pathname } = useLocation();
   const { isConnected } = useAccount();
+  const { t, i18n } = useTranslation();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [prevPathname, setPrevPathname] = useState(pathname);
 
@@ -48,6 +47,14 @@ export default function Navbar() {
     setPrevPathname(pathname);
     setMobileOpen(false);
   }
+
+  const toggleLang = () => i18n.changeLanguage(i18n.language === "fr" ? "en" : "fr");
+
+  const navLinks = NAV_ROUTES.map((route, i) => ({
+    to: route,
+    label: t(NAV_KEYS[i]),
+    icon: NAV_ICONS[i],
+  }));
 
   return (
     <nav className="bg-white/5 backdrop-blur-xl border-b border-white/8 sticky top-0 z-50">
@@ -62,13 +69,21 @@ export default function Navbar() {
 
         {isConnected && (
           <div className="hidden md:flex items-center gap-1">
-            {NAV_LINKS.map((link) => (
+            {navLinks.map((link) => (
               <NavLink key={link.to} {...link} isActive={pathname === link.to} />
             ))}
           </div>
         )}
 
         <div className="flex items-center gap-3">
+          <button
+            onClick={toggleLang}
+            className="flex items-center gap-1.5 text-sm font-medium px-2.5 py-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-white/5 transition-colors"
+            title={i18n.language === "fr" ? "Switch to English" : "Passer en francais"}
+          >
+            <Globe className="h-4 w-4" />
+            {i18n.language === "fr" ? "EN" : "FR"}
+          </button>
           <ConnectButton showBalance={false} chainStatus="icon" accountStatus="address" />
           {isConnected && (
             <button
@@ -90,7 +105,7 @@ export default function Navbar() {
             className="md:hidden border-t border-white/5 overflow-hidden"
           >
             <div className="px-4 py-3 space-y-1">
-              {NAV_LINKS.map((link) => (
+              {navLinks.map((link) => (
                 <NavLink key={link.to} {...link} isActive={pathname === link.to} />
               ))}
             </div>

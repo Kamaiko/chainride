@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { Search, SearchX } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { useCarCount, useAllCars } from "../hooks/useCarRental";
 import { extractResults } from "../lib/contractResults";
 import type { Car } from "../types/contracts";
@@ -11,6 +12,7 @@ import LoadingSkeleton from "../components/ui/LoadingSkeleton";
 import EmptyState from "../components/ui/EmptyState";
 
 export default function BrowseCarsPage() {
+  const { t } = useTranslation();
   const { data: carCount, isLoading: countLoading } = useCarCount();
   const { data: carsResult, isLoading: carsLoading } = useAllCars(carCount);
 
@@ -19,16 +21,16 @@ export default function BrowseCarsPage() {
 
   return (
     <AnimatedPage>
-      <PageHeader icon={<Search className="h-7 w-7" />} title="Parcourir les autos" />
+      <PageHeader icon={<Search className="h-7 w-7" />} title={t("browse.title")} />
 
       {isLoading && <LoadingSkeleton type="card" count={3} />}
 
       {!isLoading && cars.length === 0 && (
         <EmptyState
           icon={<SearchX className="h-12 w-12" />}
-          title="Aucune voiture"
-          description="Aucune voiture listee pour le moment. Soyez le premier !"
-          actionLabel="Lister une auto"
+          title={t("browse.empty.title")}
+          description={t("browse.empty.desc")}
+          actionLabel={t("browse.empty.action")}
           actionTo="/list"
         />
       )}

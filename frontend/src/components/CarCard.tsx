@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { Calendar, User } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { formatETH, shortenAddress } from "../lib/format";
 import type { Car } from "../types/contracts";
 import GlassCard from "./ui/GlassCard";
@@ -16,6 +17,8 @@ export default function CarCard({
   owner,
   isActive,
 }: CarCardProps) {
+  const { t } = useTranslation();
+
   return (
     <Link to={`/car/${id}`} className="block">
       <GlassCard hover>
@@ -30,14 +33,14 @@ export default function CarCard({
             </p>
           </div>
           <Badge variant={isActive ? "success" : "error"}>
-            {isActive ? "Disponible" : "Inactive"}
+            {isActive ? t("car.available") : t("car.inactive")}
           </Badge>
         </div>
 
         <div className="flex items-end justify-between mt-4">
           <div>
             <p className="text-2xl font-bold gradient-text">{formatETH(dailyPrice)} ETH</p>
-            <p className="text-xs text-slate-500">par jour</p>
+            <p className="text-xs text-slate-500">{t("car.perDay")}</p>
           </div>
           <p className="text-xs text-slate-500 flex items-center gap-1">
             <User className="h-3.5 w-3.5" />

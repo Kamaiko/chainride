@@ -1,6 +1,7 @@
 import { useState, useCallback } from "react";
 import { parseEther } from "viem";
 import { useAccount } from "wagmi";
+import { useTranslation } from "react-i18next";
 import { PlusCircle, Wallet } from "lucide-react";
 import { useListCar } from "../hooks/useCarRental";
 import { useFormResetOnSuccess } from "../hooks/useFormResetOnSuccess";
@@ -13,6 +14,7 @@ import TransactionButton from "../components/ui/TransactionButton";
 
 export default function ListCarPage() {
   const { isConnected } = useAccount();
+  const { t } = useTranslation();
   const [brand, setBrand] = useState("");
   const [model, setModel] = useState("");
   const [year, setYear] = useState("2024");
@@ -41,8 +43,8 @@ export default function ListCarPage() {
       <AnimatedPage>
         <EmptyState
           icon={<Wallet className="h-12 w-12" />}
-          title="Portefeuille requis"
-          description="Connectez votre portefeuille pour lister une auto."
+          title={t("list.wallet.title")}
+          description={t("list.wallet.desc")}
         />
       </AnimatedPage>
     );
@@ -51,12 +53,12 @@ export default function ListCarPage() {
   return (
     <AnimatedPage>
       <div className="max-w-lg mx-auto">
-        <PageHeader icon={<PlusCircle className="h-7 w-7" />} title="Lister une auto" />
+        <PageHeader icon={<PlusCircle className="h-7 w-7" />} title={t("list.title")} />
 
         <GlassCard>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-slate-300 mb-1">Marque</label>
+              <label className="block text-sm font-medium text-slate-300 mb-1">{t("list.form.brand")}</label>
               <input
                 type="text"
                 value={brand}
@@ -68,7 +70,7 @@ export default function ListCarPage() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-slate-300 mb-1">Modele</label>
+              <label className="block text-sm font-medium text-slate-300 mb-1">{t("list.form.model")}</label>
               <input
                 type="text"
                 value={model}
@@ -81,7 +83,7 @@ export default function ListCarPage() {
 
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-slate-300 mb-1">Annee</label>
+                <label className="block text-sm font-medium text-slate-300 mb-1">{t("list.form.year")}</label>
                 <input
                   type="number"
                   value={year}
@@ -94,7 +96,7 @@ export default function ListCarPage() {
               </div>
               <div>
                 <label className="block text-sm font-medium text-slate-300 mb-1">
-                  Prix / jour (ETH)
+                  {t("list.form.dailyPrice")}
                 </label>
                 <input
                   type="number"
@@ -110,7 +112,7 @@ export default function ListCarPage() {
 
             <div>
               <label className="block text-sm font-medium text-slate-300 mb-1">
-                URI metadonnees (optionnel)
+                {t("list.form.metadataURI")}
               </label>
               <input
                 type="text"
@@ -129,7 +131,7 @@ export default function ListCarPage() {
               icon={<PlusCircle className="h-4 w-4" />}
               fullWidth
             >
-              Lister l'auto
+              {t("list.form.submit")}
             </TransactionButton>
 
             <TransactionStatus

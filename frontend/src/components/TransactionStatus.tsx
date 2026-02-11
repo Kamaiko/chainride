@@ -1,5 +1,6 @@
 import { useChainId } from "wagmi";
 import { sepolia } from "wagmi/chains";
+import { useTranslation } from "react-i18next";
 import { motion } from "framer-motion";
 import { AlertCircle, Loader2, CheckCircle } from "lucide-react";
 import { getErrorMessage } from "../lib/errors";
@@ -19,6 +20,8 @@ export default function TransactionStatus({
   hash,
   error,
 }: TransactionStatusProps) {
+  const { t } = useTranslation();
+
   if (error) {
     return (
       <motion.div
@@ -27,7 +30,7 @@ export default function TransactionStatus({
         className="bg-red-500/10 border border-red-500/20 rounded-xl p-3 text-sm text-red-400 flex items-start gap-2"
       >
         <AlertCircle className="h-4 w-4 mt-0.5 shrink-0" />
-        <span>{getErrorMessage(error)}</span>
+        <span>{getErrorMessage(error, t)}</span>
       </motion.div>
     );
   }
@@ -40,7 +43,7 @@ export default function TransactionStatus({
         className="bg-amber-500/10 border border-amber-500/20 rounded-xl p-3 text-sm text-amber-400 flex items-center gap-2"
       >
         <Loader2 className="h-4 w-4 animate-spin" />
-        En attente de la signature...
+        {t("tx.pending")}
       </motion.div>
     );
   }
@@ -53,7 +56,7 @@ export default function TransactionStatus({
         className="bg-blue-500/10 border border-blue-500/20 rounded-xl p-3 text-sm text-blue-400 flex items-center gap-2"
       >
         <Loader2 className="h-4 w-4 animate-spin" />
-        Transaction en cours de confirmation...
+        {t("tx.confirming")}
         {hash && <TxLink hash={hash} />}
       </motion.div>
     );
@@ -67,7 +70,7 @@ export default function TransactionStatus({
         className="bg-green-500/10 border border-green-500/20 rounded-xl p-3 text-sm text-green-400 flex items-center gap-2"
       >
         <CheckCircle className="h-4 w-4" />
-        Transaction confirmee !
+        {t("tx.confirmed")}
         <TxLink hash={hash} />
       </motion.div>
     );
@@ -78,6 +81,7 @@ export default function TransactionStatus({
 
 function TxLink({ hash }: { hash: string }) {
   const chainId = useChainId();
+  const { t } = useTranslation();
 
   if (chainId !== sepolia.id) {
     return <span className="font-mono text-xs ml-auto opacity-70">{hash.slice(0, 10)}...</span>;
@@ -90,7 +94,7 @@ function TxLink({ hash }: { hash: string }) {
       rel="noopener noreferrer"
       className="underline font-mono text-xs ml-auto hover:opacity-80 transition-opacity"
     >
-      Voir sur Etherscan
+      {t("tx.viewEtherscan")}
     </a>
   );
 }

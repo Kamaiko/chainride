@@ -1,6 +1,7 @@
 import { useParams } from "react-router-dom";
 import { useAccount } from "wagmi";
 import { useState, useCallback } from "react";
+import { useTranslation } from "react-i18next";
 import { Coins, Shield, User, Hash, AlertTriangle } from "lucide-react";
 import {
   useCar,
@@ -24,6 +25,7 @@ export default function CarDetailPage() {
   const { carId } = useParams<{ carId: string }>();
   const id = BigInt(carId ?? "0");
   const { address } = useAccount();
+  const { t } = useTranslation();
 
   const { data: car, isLoading } = useCar(id);
   const { data: depositAmount } = useCarDepositAmount(id);
@@ -72,9 +74,9 @@ export default function CarDetailPage() {
       <AnimatedPage>
         <EmptyState
           icon={<AlertTriangle className="h-12 w-12" />}
-          title="Voiture introuvable"
-          description={`Aucune voiture trouvee avec l'ID ${carId}.`}
-          actionLabel="Retour aux autos"
+          title={t("detail.notFound.title")}
+          description={t("detail.notFound.desc", { id: carId })}
+          actionLabel={t("detail.notFound.action")}
           actionTo="/browse"
         />
       </AnimatedPage>
@@ -96,7 +98,7 @@ export default function CarDetailPage() {
               <p className="text-slate-400">{car.year}</p>
             </div>
             <Badge variant={car.isActive ? "success" : "error"}>
-              {car.isActive ? "Disponible" : "Inactive"}
+              {car.isActive ? t("car.available") : t("car.inactive")}
             </Badge>
           </div>
 
@@ -104,30 +106,30 @@ export default function CarDetailPage() {
             <div className="flex items-start gap-2">
               <Coins className="h-4 w-4 text-primary mt-0.5" />
               <div>
-                <p className="text-slate-500">Prix journalier</p>
+                <p className="text-slate-500">{t("detail.dailyPrice")}</p>
                 <p className="text-xl font-bold gradient-text">{formatETH(car.dailyPrice)} ETH</p>
               </div>
             </div>
             <div className="flex items-start gap-2">
               <Shield className="h-4 w-4 text-primary mt-0.5" />
               <div>
-                <p className="text-slate-500">Depot de garantie</p>
+                <p className="text-slate-500">{t("detail.deposit")}</p>
                 <p className="text-xl font-bold text-white">
-                  {deposit > 0n ? `${formatETH(deposit)} ETH` : "Aucun"}
+                  {deposit > 0n ? `${formatETH(deposit)} ETH` : t("detail.depositNone")}
                 </p>
               </div>
             </div>
             <div className="flex items-start gap-2">
               <User className="h-4 w-4 text-slate-500 mt-0.5" />
               <div>
-                <p className="text-slate-500">Proprietaire</p>
+                <p className="text-slate-500">{t("detail.owner")}</p>
                 <p className="font-mono text-sm text-slate-300">{shortenAddress(car.owner)}</p>
               </div>
             </div>
             <div className="flex items-start gap-2">
               <Hash className="h-4 w-4 text-slate-500 mt-0.5" />
               <div>
-                <p className="text-slate-500">ID</p>
+                <p className="text-slate-500">{t("detail.id")}</p>
                 <p className="font-mono text-sm text-slate-300">#{car.id.toString()}</p>
               </div>
             </div>
@@ -137,11 +139,11 @@ export default function CarDetailPage() {
         {/* Rent form */}
         {car.isActive && !isOwner && (
           <GlassCard>
-            <h2 className="text-xl font-semibold text-white mb-4">Louer cette auto</h2>
+            <h2 className="text-xl font-semibold text-white mb-4">{t("detail.rent.title")}</h2>
 
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm text-slate-400 mb-1">Date de debut</label>
+                <label className="block text-sm text-slate-400 mb-1">{t("detail.rent.startDate")}</label>
                 <input
                   type="date"
                   value={startStr}
@@ -150,7 +152,7 @@ export default function CarDetailPage() {
                 />
               </div>
               <div>
-                <label className="block text-sm text-slate-400 mb-1">Date de fin</label>
+                <label className="block text-sm text-slate-400 mb-1">{t("detail.rent.endDate")}</label>
                 <input
                   type="date"
                   value={endStr}
@@ -163,18 +165,18 @@ export default function CarDetailPage() {
             {validDates && rentalPrice !== undefined && (
               <div className="glass-subtle p-4 space-y-1 text-sm mt-4">
                 <p className="text-slate-300">
-                  Duree : <strong>{daysBetween(startDate, endDate)} jour(s)</strong>
+                  {t("detail.rent.duration")} : <strong>{daysBetween(startDate, endDate)} {t("detail.rent.days")}</strong>
                 </p>
                 <p className="text-slate-300">
-                  Location : <strong>{formatETH(rentalPrice)} ETH</strong>
+                  {t("detail.rent.rental")} : <strong>{formatETH(rentalPrice)} ETH</strong>
                 </p>
                 {deposit > 0n && (
                   <p className="text-slate-300">
-                    Depot : <strong>{formatETH(deposit)} ETH</strong>
+                    {t("detail.rent.depositLabel")} : <strong>{formatETH(deposit)} ETH</strong>
                   </p>
                 )}
                 <p className="text-lg font-bold gradient-text pt-1">
-                  Total : {formatETH(totalCost)} ETH
+                  {t("detail.rent.total")} : {formatETH(totalCost)} ETH
                 </p>
               </div>
             )}
@@ -188,7 +190,7 @@ export default function CarDetailPage() {
                 icon={<Coins className="h-4 w-4" />}
                 fullWidth
               >
-                Payer et louer
+                {t("detail.rent.submit")}
               </TransactionButton>
 
               <TransactionStatus
@@ -207,7 +209,7 @@ export default function CarDetailPage() {
             <div className="flex items-center gap-2 text-amber-400">
               <AlertTriangle className="h-5 w-5" />
               <p className="text-sm">
-                Vous etes le proprietaire de cette voiture. Vous ne pouvez pas la louer.
+                {t("detail.ownerWarning")}
               </p>
             </div>
           </GlassCard>
