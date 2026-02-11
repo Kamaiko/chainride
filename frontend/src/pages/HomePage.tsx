@@ -14,7 +14,6 @@ import {
 import { useCarCount, useReservationCount, useVersion } from "../hooks/useCarRental";
 import { staggerSlow, fadeUpSlow } from "../lib/animations";
 import AnimatedPage from "../components/ui/AnimatedPage";
-import GlassCard from "../components/ui/GlassCard";
 
 export default function HomePage() {
   const { isConnected } = useAccount();
@@ -24,16 +23,17 @@ export default function HomePage() {
 
   return (
     <AnimatedPage>
-      <div className="space-y-16">
+      <div className="space-y-20">
         {/* Hero */}
-        <section className="text-center py-16">
+        <section className="text-center py-20 sm:py-24">
           <motion.h1
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.5 }}
             className="text-5xl sm:text-6xl font-extrabold mb-4"
           >
-            <span className="gradient-text">ChainRide</span>
+            <span className="text-white">Chain</span>
+            <span className="gradient-text">Ride</span>
           </motion.h1>
           <motion.p
             initial={{ opacity: 0 }}
@@ -66,81 +66,99 @@ export default function HomePage() {
           </motion.div>
         </section>
 
-        {/* Stats */}
-        <motion.section
-          variants={staggerSlow}
-          initial="hidden"
-          whileInView="show"
-          viewport={{ once: true }}
-          className="grid grid-cols-1 sm:grid-cols-3 gap-6"
-        >
-          <motion.div variants={fadeUpSlow}>
-            <GlassCard>
-              <div className="text-center space-y-2">
-                <Car className="h-6 w-6 text-primary mx-auto" />
-                <p className="text-3xl font-bold gradient-text">{carCount?.toString() ?? "..."}</p>
-                <p className="text-slate-500 text-sm">Voitures listees</p>
-              </div>
-            </GlassCard>
-          </motion.div>
-          <motion.div variants={fadeUpSlow}>
-            <GlassCard>
-              <div className="text-center space-y-2">
-                <CalendarCheck className="h-6 w-6 text-primary mx-auto" />
-                <p className="text-3xl font-bold gradient-text">
-                  {reservationCount?.toString() ?? "..."}
-                </p>
-                <p className="text-slate-500 text-sm">Reservations</p>
-              </div>
-            </GlassCard>
-          </motion.div>
-          <motion.div variants={fadeUpSlow}>
-            <GlassCard>
-              <div className="text-center space-y-2">
-                <FileCode className="h-6 w-6 text-primary mx-auto" />
-                <p className="text-3xl font-bold gradient-text">{version ?? "..."}</p>
-                <p className="text-slate-500 text-sm">Version du contrat</p>
-              </div>
-            </GlassCard>
-          </motion.div>
-        </motion.section>
-
         {/* Features */}
         <motion.section
           variants={staggerSlow}
           initial="hidden"
           whileInView="show"
           viewport={{ once: true }}
-          className="grid grid-cols-1 md:grid-cols-3 gap-8"
+          className="max-w-4xl mx-auto"
         >
-          <motion.div variants={fadeUpSlow}>
-            <GlassCard>
-              <ArrowLeftRight className="h-6 w-6 text-accent mb-3" />
-              <h3 className="font-semibold text-lg text-white mb-2">Sans intermediaire</h3>
-              <p className="text-slate-400 text-sm">
-                Les paiements vont directement au proprietaire via le smart contract. Aucun tiers.
-              </p>
-            </GlassCard>
-          </motion.div>
-          <motion.div variants={fadeUpSlow}>
-            <GlassCard>
-              <Eye className="h-6 w-6 text-accent mb-3" />
-              <h3 className="font-semibold text-lg text-white mb-2">Transparent</h3>
-              <p className="text-slate-400 text-sm">
-                Toutes les transactions sont verifiables sur la blockchain Ethereum (Sepolia).
-              </p>
-            </GlassCard>
-          </motion.div>
-          <motion.div variants={fadeUpSlow}>
-            <GlassCard>
-              <ShieldCheck className="h-6 w-6 text-accent mb-3" />
-              <h3 className="font-semibold text-lg text-white mb-2">Securise</h3>
-              <p className="text-slate-400 text-sm">
-                Depot de garantie, protection contre la reentrance, et controle d'acces
-                OpenZeppelin.
-              </p>
-            </GlassCard>
-          </motion.div>
+          <div className="glass-subtle p-8">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              <motion.div variants={fadeUpSlow} className="flex items-start gap-3">
+                <div className="shrink-0">
+                  <ArrowLeftRight className="h-5 w-5 text-accent" />
+                </div>
+                <div>
+                  <h3 className="font-semibold text-white mb-1">Pair-a-pair</h3>
+                  <p className="text-slate-400 text-sm leading-relaxed">
+                    Paiements directs au proprietaire via smart contract. Aucun tiers.
+                  </p>
+                </div>
+              </motion.div>
+
+              <motion.div
+                variants={fadeUpSlow}
+                className="flex items-start gap-3 md:border-l md:border-white/5 md:pl-8"
+              >
+                <div className="shrink-0">
+                  <Eye className="h-5 w-5 text-accent" />
+                </div>
+                <div>
+                  <h3 className="font-semibold text-white mb-1">Tracable</h3>
+                  <p className="text-slate-400 text-sm leading-relaxed">
+                    Transactions verifiables sur la blockchain Ethereum (Sepolia).
+                  </p>
+                </div>
+              </motion.div>
+
+              <motion.div
+                variants={fadeUpSlow}
+                className="flex items-start gap-3 md:border-l md:border-white/5 md:pl-8"
+              >
+                <div className="shrink-0">
+                  <ShieldCheck className="h-5 w-5 text-accent" />
+                </div>
+                <div>
+                  <h3 className="font-semibold text-white mb-1">Securise</h3>
+                  <p className="text-slate-400 text-sm leading-relaxed">
+                    Depot de garantie, protection reentrance et controle OpenZeppelin.
+                  </p>
+                </div>
+              </motion.div>
+            </div>
+          </div>
+        </motion.section>
+
+        {/* Stats */}
+        <motion.section
+          variants={staggerSlow}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true }}
+        >
+          <div className="glass-subtle p-6 max-w-4xl mx-auto">
+            <div className="flex flex-wrap justify-center items-center gap-x-12 gap-y-4">
+              <motion.div variants={fadeUpSlow} className="flex items-center gap-3">
+                <Car className="h-4 w-4 text-primary" />
+                <div>
+                  <p className="text-2xl font-bold text-white">
+                    {carCount?.toString() ?? "..."}
+                  </p>
+                  <p className="text-slate-500 text-xs">Voitures listees</p>
+                </div>
+              </motion.div>
+
+              <motion.div variants={fadeUpSlow} className="flex items-center gap-3">
+                <CalendarCheck className="h-4 w-4 text-primary" />
+                <div>
+                  <p className="text-2xl font-bold text-white">
+                    {reservationCount?.toString() ?? "..."}
+                  </p>
+                  <p className="text-slate-500 text-xs">Reservations</p>
+                </div>
+              </motion.div>
+
+              <motion.div variants={fadeUpSlow} className="flex items-center gap-3">
+                <FileCode className="h-4 w-4 text-primary" />
+                <div>
+                  <p className="text-2xl font-bold text-white">{version ?? "..."}</p>
+                  <p className="text-slate-500 text-xs">Version du contrat</p>
+                </div>
+              </motion.div>
+            </div>
+          </div>
         </motion.section>
       </div>
     </AnimatedPage>

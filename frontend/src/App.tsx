@@ -35,7 +35,7 @@ function App() {
         </Suspense>
       </main>
       <footer className="text-center text-sm text-slate-600 py-4 border-t border-white/5">
-        ChainRide &mdash; Location d'autos decentralisee &mdash; IFT-4100/7100
+        ChainRide &mdash; R&eacute;alis&eacute; par Patrick Patenaude
       </footer>
     </div>
   );

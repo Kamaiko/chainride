@@ -68,8 +68,8 @@ body {
   min-height: 100vh;
   position: relative;
   background:
-    radial-gradient(ellipse 80% 60% at 80% 10%, rgba(59, 130, 246, 0.08), transparent),
-    radial-gradient(ellipse 60% 50% at 20% 90%, rgba(139, 92, 246, 0.06), transparent);
+    radial-gradient(ellipse 80% 60% at 80% 10%, rgba(59, 130, 246, 0.15), transparent),
+    radial-gradient(ellipse 60% 50% at 20% 90%, rgba(139, 92, 246, 0.12), transparent);
 }
 
 /* ── Form inputs (dark) ── */

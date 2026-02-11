@@ -54,7 +54,10 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-4 flex items-center justify-between h-16">
         <Link to="/" className="flex items-center gap-2 group">
           <Car className="h-6 w-6 text-primary group-hover:text-accent transition-colors" />
-          <span className="text-xl font-bold gradient-text">ChainRide</span>
+          <span className="text-xl font-bold">
+            <span className="text-white">Chain</span>
+            <span className="gradient-text">Ride</span>
+          </span>
         </Link>
 
         {isConnected && (
